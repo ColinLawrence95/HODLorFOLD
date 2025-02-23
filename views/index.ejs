@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>HODL or FOLD</title>
+    </head>
+    <body>
+        <%- include('./partials/_navbar.ejs') %> 
+        <% if (user) { %>
+            <h1>Welcome to the app, <%= user.username %>!</h1>
+            <% } else { %>
+            <h1>Welcome to the app, guest.</h1>
+            <% } %>
+    </body>
+</html>

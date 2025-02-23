@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dashboard</title>
+    </head>
+    <body>
+        <%- include('./partials/_navbar.ejs') %> 
+        <h1>Welcome, <%= user.username %>!</h1>  <!-- Display user's username -->
+
+        <!-- Form for searching coins -->
+        <form action="/dashboard/<%= user._id %>" method="GET">
+            <input type="text" name="coinSearch" id="coinSearch" required placeholder="Search Coin" value="<%= coinSearch || '' %>" />
+            <button type="submit">Search</button>
+        </form>
+
+        <!-- Loop through the coin data and display prices -->
+        <% if (coinData) { %>
+            <% for (let coin in coinData) { %>
+                <h1>
+                    <%= coin.charAt(0).toUpperCase() + coin.slice(1) %>: $<%= coinData[coin].usd %>
+                </h1>
+            <% } %>
+        <% } else { %>
+            <p>No data found. Please try searching again.</p>
+        <% } %>
+    </body>
+</html>
