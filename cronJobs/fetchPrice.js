@@ -1,7 +1,6 @@
 const cron = require("node-cron");
 const axios = require("axios");
 const mongoose = require("mongoose");
-const CoinPrice = require("../models/coinPriceCurrent");
 const CoinPriceHistory = require("../models/coinPriceHistory");
 
 const fetchCryptoPrices = async () => {
@@ -14,7 +13,7 @@ const fetchCryptoPrices = async () => {
                 params: {
                     vs_currency: "usd",
                     order: "market_cap_desc",
-                    per_page: 100,
+                    per_page: 250,
                     page: 1,
                     sparkline: false,
                 },
@@ -22,17 +21,6 @@ const fetchCryptoPrices = async () => {
         );
 
         for (let coin of response.data) {
-            await CoinPrice.findOneAndUpdate(
-                { coinId: coin.id },
-                {
-                    name: coin.name,
-                    symbol: coin.symbol,
-                    price: coin.current_price,
-                    lastUpdated: new Date(),
-                },
-                { upsert: true, new: true }
-            );
-
             await CoinPriceHistory.create({
                 coinId: coin.id,
                 price: coin.current_price,
@@ -47,12 +35,10 @@ const fetchCryptoPrices = async () => {
         console.error("Error fetching crypto prices:", error);
     }
 };
-
 cron.schedule("0 * * * *", () => {
     console.log(
         "Running cron job to fetch crypto prices and store historical data..."
     );
     fetchCryptoPrices();
 });
-
 module.exports = fetchCryptoPrices;

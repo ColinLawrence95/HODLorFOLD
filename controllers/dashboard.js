@@ -1,12 +1,13 @@
 const express = require("express");
 const axios = require("axios");
-const coinPrice = require("../models/coinPriceCurrent");
+const coinPriceHistory = require("../models/coinPriceHistory")
 const router = express.Router();
-
 router.get("/", async (req, res) => {
     const coinSearch = req.query.coinSearch || "bitcoin";
     const user = req.session.user;
-
+    if(!user){
+        res.redirect("/auth/sign-in");
+    }
     try {
         const response = await axios.get(
             "https://api.coingecko.com/api/v3/simple/price",
@@ -17,11 +18,12 @@ router.get("/", async (req, res) => {
                 },
             }
         );
-
+        const historicalData = await getHistoricalData(coinSearch);
         res.render("dashboard/dashboard", {
             coinData: response.data,
             coinSearch: coinSearch,
             user: user,
+            historicalData: historicalData,
         });
     } catch (error) {
         console.error("Error fetching crypto prices:", error);
@@ -29,16 +31,23 @@ router.get("/", async (req, res) => {
         res.redirect("/");
     }
 });
-
-router.get("/coin/:coinId/history", async (req, res) => {
-    const { coinId } = req.params;
-
+async function getHistoricalData(coinId) {
     try {
-        const history = await getHistoricalData(coinId);
+        // Query the database to get the historical data for the given coinId
+        const historicalData = await coinPriceHistory.find({ coinId: coinId })
+            .sort({ timestamp: 1 }) // Sort by timestamp in ascending order (oldest first)
+            .select('timestamp price'); // Only select the relevant fields
 
-        res.json(history);
+        // Check if historical data exists
+        if (!historicalData || historicalData.length === 0) {
+            throw new Error("No historical data found for this coin.");
+        }
+
+        // Return the historical data
+        return historicalData;
     } catch (error) {
-        res.status(500).send("Error fetching historical data.");
+        console.error("Error fetching historical data from database:", error);
+        throw error; // Rethrow the error to be caught by the caller
     }
-});
+}
 module.exports = router;
