@@ -29,13 +29,13 @@ const fetchCryptoPrices = async () => {
         }
 
         console.log(
-            "Top 100 crypto prices and historical data updated in the database."
+            "Top 250 crypto prices and historical data updated in the database."
         );
     } catch (error) {
         console.error("Error fetching crypto prices:", error);
     }
 };
-cron.schedule("0 * * * *", () => {
+cron.schedule("*/10 * * * *", () => {
     console.log(
         "Running cron job to fetch crypto prices and store historical data..."
     );

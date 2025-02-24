@@ -3,7 +3,8 @@ const axios = require("axios");
 const coinPriceHistory = require("../models/coinPriceHistory")
 const router = express.Router();
 router.get("/", async (req, res) => {
-    const coinSearch = req.query.coinSearch || "bitcoin";
+    let coinSearch = req.query.coinSearch || "bitcoin";
+    coinSearch = coinSearch.toLowerCase();
     const user = req.session.user;
     if(!user){
         res.redirect("/auth/sign-in");
