@@ -10,21 +10,27 @@ const betSchema = new mongoose.Schema({
     betType: {
         type: String,
     },
-    amount: {
-        type: Number,
-    },
     wager: {
         type: Number,
     },
     betLength: {
         type: Number,
     },
-    betStartTime: {
-        type: Number,
+    betPostTime: {
+        type: Date,
+    },
+    inProgress:{
+        type: Boolean,
+        default: false,
     },
     resolved: {
         type: Boolean,
     },
+    acceptedBy: {
+        type: String,
+        ref: "User", 
+        
+    }
 });
 const Bets = mongoose.model("Bets", betSchema);
 module.exports = Bets;

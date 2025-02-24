@@ -39,4 +39,3 @@ app.use("/betBoard/:userId", betBoardController)
 app.listen(port, () => {
     console.log(`The express app is ready on port ${port}!`);
 });
-// fetchPrice();
