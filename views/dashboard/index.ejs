@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%=user.username%>'s Dashboard</title>
+        <!-- Include Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <!-- Include chartjs-adapter-date-fns (for date handling in Chart.js) -->
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    </head>
+    <body>
+        <%- include('../partials/_navbar.ejs') %>
+        <h1><%=user.username%>'s Dashboard</h1>
+        <form action="/dashboard/<%= user._id %>" method="GET">
+            <input
+                type="text"
+                name="coinSearch"
+                id="coinSearch"
+                required
+                placeholder="Search Coin"
+                value="<%= coinSearch || '' %>"
+            />
+            <button type="submit">Search</button>
+            <div>
+                <button id="1Day" onclick="updateChart('1Day')">1 Day</button>
+                <button id="1Week" onclick="updateChart('1Week')">1 Week</button>
+                <button id="1Month" onclick="updateChart('1Month')">1 Month</button>
+            </div>
+        </form>
+        <h2><%= coinSearch %> Price</h2>
+        <p>Current Price: $<%= coinData[coinSearch].usd %></p>
+<p>Powered by <a href="https://www.coingecko.com/en/api">CoinGecko API</a></p>
+        <h3>Price History Graph</h3>
+       
+        <canvas id="priceChart" width="600" height="200"></canvas>
+
+        <script>
+            // Embed the historical data directly into the script
+            const historicalData = <%- JSON.stringify(historicalData) %>;
+
+            // Default time period set to 1 Month
+            let currentData = historicalData;
+
+            // Filter data based on the selected time range
+            function filterData(timePeriod) {
+                const now = new Date();
+                let filteredData = [];
+
+                if (timePeriod === '1Day') {
+                    // Filter for last 24 hours
+                    filteredData = historicalData.filter(data => new Date(data.timestamp) >= new Date(now - 24 * 60 * 60 * 1000));
+                } else if (timePeriod === '1Week') {
+                    // Filter for last 7 days
+                    filteredData = historicalData.filter(data => new Date(data.timestamp) >= new Date(now - 7 * 24 * 60 * 60 * 1000));
+                } else if (timePeriod === '1Month') {
+                    // Filter for last 30 days
+                    filteredData = historicalData.filter(data => new Date(data.timestamp) >= new Date(now - 30 * 24 * 60 * 60 * 1000));
+                }
+
+                return filteredData;
+            }
+            // Update the chart when the time period is changed
+            function updateChart(timePeriod) {
+                // Get the filtered data
+                const filteredData = filterData(timePeriod);
+
+                // Prepare labels and prices for the chart
+                const labels = filteredData.map(data => new Date(data.timestamp));
+                const prices = filteredData.map(data => data.price);
+
+                // Update the chart
+                const ctx = document.getElementById('priceChart').getContext('2d');
+                const priceChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,  // Time labels as Date objects
+                        datasets: [{
+                            label: 'Price (USD)',
+                            data: prices,  // Coin prices
+                            borderColor: "rgba(171, 36, 36)",
+                            backgroundColor: "rgba(171, 36, 36, 0.2)",
+                            fill: true,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    unit: 'minute',
+                                    tooltipFormat: 'll HH:mm',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Time'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Price (USD)'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            // Initialize with 1 Month data
+            document.addEventListener('DOMContentLoaded', function() {
+                updateChart('1Month');
+            });
+        </script>
+    </body>
+</html>

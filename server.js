@@ -9,6 +9,7 @@ const session = require("express-session");
 const port = process.env.PORT ? process.env.PORT : "3000";
 const authController = require("./controllers/auth.js");
 const dashboardController = require("./controllers/dashboard.js");
+const betBoardController = require("./controllers/betBoard.js");
 const fetchPrice = require("./cronJobs/fetchPrice.js");
 
 mongoose.connect(process.env.MONGODB_URI);
@@ -33,8 +34,9 @@ app.get("/", function (req, res) {
 
 app.use("/dashboard/:userId", dashboardController);
 app.use("/auth", authController);
+app.use("/betBoard/:userId", betBoardController)
 
 app.listen(port, () => {
     console.log(`The express app is ready on port ${port}!`);
 });
-fetchPrice();
+// fetchPrice();

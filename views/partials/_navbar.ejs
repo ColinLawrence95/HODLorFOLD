@@ -3,6 +3,8 @@
     <% if(user) { %>
         <a href="/auth/sign-out">Sign Out</a>
         <a href="/dashboard/<%= user._id %>">Dashboard</a>
+        <a href="/betBoard/<%= user._id %>">Bet Board</a>
+        <p>Tokens: <%=user.tokens%></p>
     <%} else { %>
     <a href="/auth/sign-in">Sign In</a>
     <a href="/auth/sign-up">Sign Up</a>

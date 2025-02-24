@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bet Board</title>
+</head>
+<body>
+    <%- include('../partials/_navbar.ejs') %>
+    <h1>Bet Board</h1>
+
+    <form action="/betBoard/<%= user._id %>/newBet" method="GET">
+        <button type="submit">New Bet</button>
+    </form>
+
+    <% if (bets && bets.length > 0) { %>
+        <% bets.forEach(bet => { %>
+            <p><%= `${bet.userId.username} thinks ${bet.coinId} will go ${bet.betType} by ${bet.amount}% and is wagering ${bet.wager} tokens!` %></p>
+            <button>Take Bet</button>
+        <% }) %>
+    <% } else { %>
+        <p>No bets available.</p>
+    <% } %>
+
+</body>
+</html>

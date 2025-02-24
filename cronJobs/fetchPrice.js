@@ -1,11 +1,9 @@
 const cron = require("node-cron");
 const axios = require("axios");
-const mongoose = require("mongoose");
 const CoinPriceHistory = require("../models/coinPriceHistory");
 
 const fetchCryptoPrices = async () => {
-    console.log("Fetching top 100 crypto prices...");
-
+    console.log("Fetching top 250 crypto prices...");
     try {
         const response = await axios.get(
             "https://api.coingecko.com/api/v3/coins/markets",
@@ -19,7 +17,6 @@ const fetchCryptoPrices = async () => {
                 },
             }
         );
-
         for (let coin of response.data) {
             await CoinPriceHistory.create({
                 coinId: coin.id,
@@ -27,18 +24,14 @@ const fetchCryptoPrices = async () => {
                 timestamp: new Date(),
             });
         }
-
         console.log(
-            "Top 250 crypto prices and historical data updated in the database."
+            "Top 250 crypto prices data updated in the database."
         );
     } catch (error) {
         console.error("Error fetching crypto prices:", error);
     }
 };
 cron.schedule("*/10 * * * *", () => {
-    console.log(
-        "Running cron job to fetch crypto prices and store historical data..."
-    );
     fetchCryptoPrices();
 });
 module.exports = fetchCryptoPrices;

@@ -2,6 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const coinPriceHistory = require("../models/coinPriceHistory")
 const router = express.Router();
+
 router.get("/", async (req, res) => {
     let coinSearch = req.query.coinSearch || "bitcoin";
     coinSearch = coinSearch.toLowerCase();
@@ -20,7 +21,7 @@ router.get("/", async (req, res) => {
             }
         );
         const historicalData = await getHistoricalData(coinSearch);
-        res.render("dashboard/dashboard", {
+        res.render("dashboard/index.ejs", {
             coinData: response.data,
             coinSearch: coinSearch,
             user: user,

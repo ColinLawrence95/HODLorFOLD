@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sign In</title>
+    </head>
+    <body>
+        <%- include('../partials/_navbar.ejs') %> 
+        <h1>New Bet</h1>
+        <form action="/betBoard/<%= user._id %>" method="POST">
+            <label for="coinId">Coin Name</label>
+            <input type="text" name="coinId" id="coinId" required />
+            <select name="betType">
+                <option value="up">Up</option>
+                <option value="down">Down</option>
+            </select>
+            <label for="percentage">Percentage</label>
+            <input type="text" name="amount" id="amount" required />
+            <label for="wager">Wager</label>
+            <input type="text" name="wager" id="wager" required />
+            <button type="submit">Post Bet</button>
+
+        </form>
+    </body>
+</html>
