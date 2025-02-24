@@ -9,6 +9,9 @@ const userSchema = mongoose.Schema({
         required: true,
     },
     favorites: [{type: String}],
+    tokens:{
+        type: Number,
+    },
 });
 const User = mongoose.model("User", userSchema);
 module.exports = User;

@@ -15,6 +15,7 @@ router.get("/sign-in", (req, res) => {
 });
 
 router.get("/sign-out", (req, res) => {
+    user: req.session.user,
     req.session.destroy();
     res.redirect("/");
 });
@@ -68,15 +69,13 @@ router.post("/sign-in", async (req, res) => {
             return res.send("Login failed. Please try again.");
         }
 
-        // There is a user AND they had the correct password. Time to make a session!
-        // Avoid storing the password, even in hashed format, in the session
-        // If there is other data you want to save to `req.session.user`, do so here!
+
         req.session.user = {
             username: userInDatabase.username,
             _id: userInDatabase._id,
         };
 
-        res.redirect("/dashboard/:userId");
+        res.redirect(`/dashboard/${req.session.user._id}`);
     } catch (error) {
         console.log(error);
         res.redirect("/");
