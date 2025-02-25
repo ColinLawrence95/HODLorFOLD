@@ -19,6 +19,9 @@ const betSchema = new mongoose.Schema({
     betPostTime: {
         type: Date,
     },
+    startPrice: {
+        type: Number,
+    },
     inProgress:{
         type: Boolean,
         default: false,

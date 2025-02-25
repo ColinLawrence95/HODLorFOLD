@@ -44,73 +44,103 @@
 
             // Filter data based on the selected time range
             function filterData(timePeriod) {
-                const now = new Date();
-                let filteredData = [];
+    const now = new Date();
+    let filteredData = [];
 
-                if (timePeriod === '1Day') {
-                    // Filter for last 24 hours
-                    filteredData = historicalData.filter(data => new Date(data.timestamp) >= new Date(now - 24 * 60 * 60 * 1000));
-                } else if (timePeriod === '1Week') {
-                    // Filter for last 7 days
-                    filteredData = historicalData.filter(data => new Date(data.timestamp) >= new Date(now - 7 * 24 * 60 * 60 * 1000));
-                } else if (timePeriod === '1Month') {
-                    // Filter for last 30 days
-                    filteredData = historicalData.filter(data => new Date(data.timestamp) >= new Date(now - 30 * 24 * 60 * 60 * 1000));
-                }
+    if (!historicalData || historicalData.length === 0) {
+        console.error("No historical data available.");
+        return [];
+    }
 
-                return filteredData;
-            }
-            // Update the chart when the time period is changed
-            function updateChart(timePeriod) {
-                // Get the filtered data
-                const filteredData = filterData(timePeriod);
+    // Ensure timestamps are properly parsed
+    filteredData = historicalData.filter(data => {
+        const dataTime = new Date(data.timestamp); // Convert to Date object
+        if (timePeriod === '1Day') {
+            return dataTime >= new Date(now - 24 * 60 * 60 * 1000);
+        } else if (timePeriod === '1Week') {
+            return dataTime >= new Date(now - 7 * 24 * 60 * 60 * 1000);
+        } else if (timePeriod === '1Month') {
+            return dataTime >= new Date(now - 30 * 24 * 60 * 60 * 1000);
+        }
+        return false;
+    });
 
-                // Prepare labels and prices for the chart
-                const labels = filteredData.map(data => new Date(data.timestamp));
-                const prices = filteredData.map(data => data.price);
+    console.log(`Filtered Data for ${timePeriod}:`, filteredData); // Debugging
+    return filteredData;
+}
 
-                // Update the chart
-                const ctx = document.getElementById('priceChart').getContext('2d');
-                const priceChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,  // Time labels as Date objects
-                        datasets: [{
-                            label: 'Price (USD)',
-                            data: prices,  // Coin prices
-                            borderColor: "rgba(171, 36, 36)",
-                            backgroundColor: "rgba(171, 36, 36, 0.2)",
-                            fill: true,
-                        }]
+let priceChart; // Store chart instance globally
+
+function updateChart(timePeriod) {
+    event.preventDefault(); // Prevent button click from refreshing the page
+
+    const filteredData = filterData(timePeriod);
+    if (filteredData.length === 0) {
+        alert("No historical data available for this time range.");
+        return;
+    }
+
+    const labels = filteredData.map(data => new Date(data.timestamp));
+    const prices = filteredData.map(data => data.price);
+
+    // Dynamically adjust the time unit
+    let timeUnit = 'day'; // Default to 'day'
+    if (timePeriod === '1Day') {
+        timeUnit = 'hour'; // Show hourly data for 1-day view
+    }
+
+    if (priceChart) {
+        // Update existing chart
+        priceChart.data.labels = labels;
+        priceChart.data.datasets[0].data = prices;
+        priceChart.options.scales.x.time.unit = timeUnit; // Change time unit dynamically
+        priceChart.update();
+    } else {
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        priceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Price (USD)',
+                    data: prices,
+                    borderColor: "rgba(171, 36, 36)",
+                    backgroundColor: "rgba(171, 36, 36, 0.2)",
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: timeUnit, // Dynamically set time unit
+                            tooltipFormat: timeUnit === 'hour' ? 'MMM dd, HH:mm' : 'MMM dd', // Adjust tooltip format
+                        },
+                        title: {
+                            display: true,
+                            text: 'Time'
+                        }
                     },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            x: {
-                                type: 'time',
-                                time: {
-                                    unit: 'minute',
-                                    tooltipFormat: 'll HH:mm',
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Time'
-                                }
-                            },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: 'Price (USD)'
-                                }
-                            }
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Price (USD)'
                         }
                     }
-                });
+                }
             }
-            // Initialize with 1 Month data
-            document.addEventListener('DOMContentLoaded', function() {
-                updateChart('1Month');
-            });
+        });
+    }
+}
+
+// Initialize with 1 Month data on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateChart('1Month');
+});
+
+
         </script>
     </body>
 </html>
