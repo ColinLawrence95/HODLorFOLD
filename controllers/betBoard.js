@@ -92,12 +92,12 @@ router.post("/acceptBet/:betId", async function (req, res) {
     console.log("Starting bet Timer");
     res.redirect(`/betBoard/${user._id}`);
 
-    setTimeout(() => betTimer(bet._id), bet.betLength * 60 * 1000);
+    setTimeout(() => betTimer(bet._id, userPosted), bet.betLength * 60 * 1000);
 
 });
 module.exports = router;
 
-async function betTimer(betId) {
+async function betTimer(betId, userPosted) {
     const updatedBet = await Bets.findById(betId);
     if (!updatedBet || updatedBet.betResolved) return;
 
