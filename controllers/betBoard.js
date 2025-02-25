@@ -32,17 +32,25 @@ router.get("/", async function (req, res) {
 });
 router.get("/newBet", async function (req, res) {
     const user = req.session.user;
+    if (!user) {
+        res.redirect("/auth/sign-in");
+    }
     res.render("betBoard/newBet.ejs", { user });
 });
 router.get("/acceptBet/:betId", async function (req, res) {
     const user = req.session.user;
+    if (!user) {
+        res.redirect("/auth/sign-in");
+    }
     let betId = req.params.betId;
     let bet = await Bets.findById(betId).populate("userId", "username");
     res.render("betBoard/acceptBet.ejs", { user, bet });
 });
 router.post("/", async function (req, res) {
     const user = req.session.user;
-
+    if (!user) {
+        res.redirect("/auth/sign-in");
+    }
     await Bets.create({
         ...req.body,
         userId: user._id,
@@ -53,6 +61,9 @@ router.post("/", async function (req, res) {
 router.post("/acceptBet/:betId", async function (req, res) {
     const userSession = req.session.user;
     const user = await User.findById(userSession._id);
+    if (!user) {
+        res.redirect("/auth/sign-in");
+    }
     const betId = req.params.betId;
     const bet = await Bets.findById(betId).populate("userId");
     const wager = bet.wager;
@@ -124,6 +135,7 @@ async function betTimer(betId) {
     updatedBet.betResolved = true;
     updatedBet.betInProgress = false;
     updatedBet.betEndPrice = endPrice;
+
     await updatedBet.save();
 
     console.log(
