@@ -24,12 +24,15 @@ setInterval(async () => {
 
 router.get("/", async function (req, res) {
     const user = req.session.user;
+    const userInDB = await User.findById(user._id);
     const bets = await Bets.find().populate("userId", "username");
     if (!user) {
         res.redirect("/auth/sign-in");
     }
+    user.tokens = userInDB.tokens;
     res.render("betBoard/index.ejs", { user, bets });
 });
+
 router.get("/newBet", async function (req, res) {
     const user = req.session.user;
     if (!user) {
@@ -37,6 +40,7 @@ router.get("/newBet", async function (req, res) {
     }
     res.render("betBoard/newBet.ejs", { user });
 });
+
 router.get("/acceptBet/:betId", async function (req, res) {
     const user = req.session.user;
     if (!user) {
@@ -46,6 +50,7 @@ router.get("/acceptBet/:betId", async function (req, res) {
     let bet = await Bets.findById(betId).populate("userId", "username");
     res.render("betBoard/acceptBet.ejs", { user, bet });
 });
+
 router.post("/", async function (req, res) {
     const user = req.session.user;
     if (!user) {
@@ -58,6 +63,7 @@ router.post("/", async function (req, res) {
     });
     res.redirect(`/betBoard/${user._id}`);
 });
+
 router.post("/acceptBet/:betId", async function (req, res) {
     const userSession = req.session.user;
     const user = await User.findById(userSession._id);
@@ -85,7 +91,6 @@ router.post("/acceptBet/:betId", async function (req, res) {
     bet.betInProgress = true;
     bet.betAcceptedBy = userSession._id;
     bet.betStartPrice = startPrice;
-    req.session.user.tokens = user.tokens;
     await user.save();
     await userPosted.save();
     await bet.save();
@@ -95,6 +100,7 @@ router.post("/acceptBet/:betId", async function (req, res) {
     setTimeout(() => betTimer(bet._id, userPosted), bet.betLength * 60 * 1000);
 
 });
+
 module.exports = router;
 
 async function betTimer(betId, userPosted) {

@@ -2,14 +2,17 @@ const express = require("express");
 const axios = require("axios");
 const coinPriceHistory = require("../models/coinPriceHistory")
 const router = express.Router();
+const User = require("../models/user");
 
 router.get("/", async (req, res) => {
+    const user = req.session.user;
+    const userInDB = await User.findById(user._id);
     let coinSearch = req.query.coinSearch || "bitcoin";
     coinSearch = coinSearch.toLowerCase();
-    const user = req.session.user;
     if(!user){
         res.redirect("/auth/sign-in");
     }
+    user.tokens = userInDB.tokens;
     try {
         const response = await axios.get(
             "https://api.coingecko.com/api/v3/simple/price",

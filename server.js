@@ -10,7 +10,7 @@ const port = process.env.PORT ? process.env.PORT : "3000";
 const authController = require("./controllers/auth.js");
 const dashboardController = require("./controllers/dashboard.js");
 const betBoardController = require("./controllers/betBoard.js");
-const fetchPrice = require("./cronJobs/fetchPrice.js");
+
 
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on("connected", function () {

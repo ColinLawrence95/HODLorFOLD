@@ -32,14 +32,13 @@
         <% } %>
 
         <h1>Your Bets</h1>
-        <% if (bets && bets.length > 0) { %> <% bets.forEach(bet => { %> <%
-        if(user._id === bet.userId._id.toString() && !bet.betResolved|| user._id
-        === bet.betAcceptedBy && !bet.betResolved) { %>
-        <p>
-            <%= `${bet.userId.username} thinks ${bet.coinId} will be 
-            ${bet.betType} after ${bet.betLength}Hr and is wagering ${bet.wager} tokens!` %>
-        </p>
-        <% } %> <% }) %> <% } else { %>
+        <% if (bets && bets.length > 0) { %> 
+            <% bets.forEach(bet => { %> 
+                <% if(user._id === bet.userId._id.toString() && !bet.betResolved || user._id === bet.betAcceptedBy && !bet.betResolved) { %>
+                    <p><%=`${bet.userId.username} thinks ${bet.coinId} will be ${bet.betType} after ${bet.betLength}Hr and is wagering ${bet.wager} tokens!` %></p>
+                <% } %> 
+            <% }) %> 
+        <% } else { %>
         <p>No bets posted or accepted yet.</p>
         <% } %>
     </body>
