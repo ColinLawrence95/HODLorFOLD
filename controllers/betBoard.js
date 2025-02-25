@@ -71,16 +71,62 @@ router.post("/acceptBet/:betId", async function (req, res) {
 
     user.tokens -= wager;
     userPosted.tokens -= wager;
-    bet.inProgress = true;
-    bet.acceptedBy = userSession._id;
-    bet.startPrice = startPrice;
+    bet.betInProgress = true;
+    bet.betAcceptedBy = userSession._id;
+    bet.betStartPrice = startPrice;
     req.session.user.tokens = user.tokens;
-    bet.startPrice = startPrice;
-
     await user.save();
     await userPosted.save();
     await bet.save();
-
+    console.log("Starting bet Timer");
     res.redirect(`/betBoard/${user._id}`);
+
+    setTimeout(() => betTimer(bet._id), bet.betLength * 60 * 1000);
+
 });
 module.exports = router;
+
+async function betTimer(betId) {
+    const updatedBet = await Bets.findById(betId);
+    if (!updatedBet || updatedBet.betResolved) return;
+
+    const endResponse = await axios.get(
+        "https://api.coingecko.com/api/v3/simple/price",
+        {
+            params: { ids: updatedBet.coinId, vs_currencies: "usd" },
+        }
+    );
+
+    const endPrice = endResponse.data[updatedBet.coinId]?.usd;
+    if (!endPrice) {
+        console.error("Cannot fetch end price");
+        return;
+    }
+
+    let winner;
+    if (updatedBet.betType === "up" && endPrice > updatedBet.betStartPrice) {
+        winner = userPosted;
+    } else if (
+        updatedBet.betType === "down" &&
+        endPrice < updatedBet.betStartPrice
+    ) {
+        winner = userPosted;
+    } else {
+        winner = updatedBet.betAcceptedBy;
+    }
+
+    if (winner) {
+        const winningUser = await User.findById(winner);
+        winningUser.tokens += updatedBet.wager * 2; // Double the wagered amount
+        await winningUser.save();
+        
+    }
+    updatedBet.betResolved = true;
+    updatedBet.betInProgress = false;
+    updatedBet.betEndPrice = endPrice;
+    await updatedBet.save();
+
+    console.log(
+        `Bet ${updatedBet._id} resolved. Winner: ${winner || "No one"}`
+    );
+}

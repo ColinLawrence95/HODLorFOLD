@@ -15,11 +15,11 @@
 
         <h1>Open Bets</h1>
         <% if (bets && bets.length > 0) { %> <% bets.forEach(bet => { %> <% if
-        (!bet.inProgress && user._id !== bet.userId._id.toString()) { %>
+        (!bet.betInProgress && !bet.betResolved && user._id !==
+        bet.userId._id.toString()) { %>
         <p>
-            <%= `${bet.userId.username} thinks ${bet.coinId} will go
-            ${bet.betType} and is wagering ${bet.wager}
-            tokens!` %>
+            <%= `${bet.userId.username} thinks ${bet.coinId} will be
+            ${bet.betType} after ${bet.betLength}Hr and is wagering ${bet.wager} tokens!` %>
         </p>
         <form
             action="/betBoard/<%= user._id %>/acceptBet/<%= bet._id %>"
@@ -33,11 +33,11 @@
 
         <h1>Your Bets</h1>
         <% if (bets && bets.length > 0) { %> <% bets.forEach(bet => { %> <%
-        if(user._id === bet.userId._id.toString()|| user._id === bet.acceptedBy) { %>
+        if(user._id === bet.userId._id.toString() && !bet.betResolved|| user._id
+        === bet.betAcceptedBy && !bet.betResolved) { %>
         <p>
-            <%= `${bet.userId.username} thinks ${bet.coinId} will go
-            ${bet.betType} and is wagering ${bet.wager}
-            tokens!` %>
+            <%= `${bet.userId.username} thinks ${bet.coinId} will be 
+            ${bet.betType} after ${bet.betLength}Hr and is wagering ${bet.wager} tokens!` %>
         </p>
         <% } %> <% }) %> <% } else { %>
         <p>No bets posted or accepted yet.</p>

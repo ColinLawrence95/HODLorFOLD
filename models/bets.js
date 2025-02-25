@@ -19,17 +19,20 @@ const betSchema = new mongoose.Schema({
     betPostTime: {
         type: Date,
     },
-    startPrice: {
+    betStartPrice: {
         type: Number,
     },
-    inProgress:{
+    betEndPrice: {
+        type: Number,
+    },
+    betInProgress:{
         type: Boolean,
         default: false,
     },
-    resolved: {
+    betResolved: {
         type: Boolean,
     },
-    acceptedBy: {
+    betAcceptedBy: {
         type: String,
         ref: "User", 
         
