@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
     let coinSearch = req.query.coinSearch || "bitcoin";
     coinSearch = coinSearch.toLowerCase();
     if(!user){
-        res.redirect("/auth/sign-in");
+        return res.redirect("/auth/sign-in");
     }
     user.tokens = userInDB.tokens;
     try {
