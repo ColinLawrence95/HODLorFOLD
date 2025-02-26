@@ -13,9 +13,8 @@ setInterval(async () => {
             inProgress: false,
             betPostTime: { $lt: cutoffTime },
         });
-        if (result.deletedCount > 0) {
             console.log(`Deleted ${result.deletedCount} expired bets.`);
-        }
+
     } catch (err) {
         console.error("Error deleting expired bets:", err);
     }

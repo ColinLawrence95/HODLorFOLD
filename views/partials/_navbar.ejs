@@ -1,18 +1,22 @@
 <nav class="navbar">
-    <% if (user) { %>
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/auth/sign-out">Sign Out</a>
-            <a href="/dashboard/<%= user._id %>">Dashboard</a>
-            <a href="/betBoard/<%= user._id %>">Bet Board</a>
-            <p>Tokens: <%= user.tokens %></p>
-        </div>
-    <% } else { %>
-        <div class="auth-links">
-            <a href="/auth/sign-up" class="sign-up"><button class="sign-up">Sign Up</button></a>
-                <h1 id="title">HOLD or FOLD</h1>
-            <a href="/auth/sign-in" class="sign-in"><button class="sign-in">Sign In</button></a>
-            
-        </div>
-    <% } %>
+	<% if (user) { %>
+	<div class="nav-links">
+		<a href="/">Home</a>
+		<a href="/auth/sign-out">Sign Out</a>
+		<a href="/dashboard/<%= user._id %>">Dashboard</a>
+		<a href="/betBoard/<%= user._id %>">Bet Board</a>
+		<p>Tokens: <%= user.tokens %></p>
+	</div>
+	<% } else if (whatPage === "signup") { %>
+	<a href="/" class="home"> <button class="home">Home</button> </a>
+	<h1 id="title">HOLD or FOLD</h1>
+	<a href="/auth/sign-in" class="sign-in"><button class="sign-in">Sign In</button></a>
+	<% } else { %>
+	<div class="auth-links">
+		<a href="/auth/sign-up" class="sign-up"><button class="sign-up">Sign Up</button></a>
+		<h1 id="title">HOLD or FOLD</h1>
+		<a href="/auth/sign-in" class="sign-in"><button class="sign-in">Sign In</button></a>
+
+	</div>
+	<% } %>
 </nav>
