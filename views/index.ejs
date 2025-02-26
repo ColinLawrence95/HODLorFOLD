@@ -1,16 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>HOLD or FOLD</title>
-    </head>
-    <body>
-        <%- include('./partials/_navbar.ejs') %> 
-        <% if (user) { %>
-            <h1>Welcome to HOLD or FOLD, <%= user.username %>!</h1>
-            <% } else { %>
-            <h1>Welcome to HOLD or FOLD</h1>
-            <% } %>
-    </body>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>HOLD or FOLD</title>
+</head>
+
+<body>
+	<%- include('./partials/_navbar.ejs') %>
+	<% if (user) { %>
+	<h1>Welcome to HOLD or FOLD, <%= user.username %>!</h1>
+	<% } else { %>
+	<h1>Welcome to HOLD or FOLD</h1>
+	<% } %>
+
+	<h3>Top Bets</h3>
+	<% if (topBets.length > 0) { %>
+	<% topBets.forEach(bet => { %>
+	<p>
+		<%= `Bet ID: ${bet._id} ${bet.coinId} ${bet.betType} in ${bet.betLength}hr ${bet.wager} tokens` %>
+		<% if (user) { %>
+		<a href="/betBoard/<%= user._id %>"><button>Bet Against</button></a>
+		<% } else { %>
+		<a href="/auth/sign-in"><button>Bet Against</button></a>
+		<% } %>
+
+	</p>
+	<% }); %>
+	<% } else { %>
+	<p>No active bets available.</p>
+	<% } %>
+</body>
+
+
 </html>

@@ -63,6 +63,7 @@ router.post("/", async function (req, res) {
             ...req.body,
             userId: user._id,
             betPostTime: new Date(),
+            betResolved: false,
         });
         res.redirect(`/betBoard/${user._id}`);
     }

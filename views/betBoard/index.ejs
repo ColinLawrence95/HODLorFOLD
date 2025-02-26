@@ -1,80 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Bet Board</title>
-    </head>
-    <body>
-        <%- include('../partials/_navbar.ejs') %>
-        <h1>Bet Board</h1>
 
-        <form action="/betBoard/<%= user._id %>/newBet" method="GET">
-            <button type="submit">New Bet</button>
-        </form>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bet Board</title>
+</head>
 
-        <h1>Open Bets</h1>
-        <% if (bets && bets.length > 0) { %> <% bets.forEach(bet => { %> <% if
+<body>
+  <%- include('../partials/_navbar.ejs') %>
+  <h1>Bet Board</h1>
+
+  <form action="/betBoard/<%= user._id %>/newBet" method="GET">
+    <button type="submit">New Bet</button>
+  </form>
+
+  <h1>Open Bets</h1>
+  <% if (bets && bets.length > 0) { %> <% bets.forEach(bet => { %> <% if
         (!bet.betInProgress && !bet.betResolved && user._id !==
         bet.userId._id.toString()) { %>
-            <h4><%= `Bet ID: ${bet._id}` %></h4> 
-            <p><%=`${bet.userId.username} thinks ${bet.coinId} will be ${bet.betType} after ${bet.betLength}Hr and is wagering ${bet.wager} tokens!` %></p>
-        <form
-            action="/betBoard/<%= user._id %>/acceptBet/<%= bet._id %>"
-            method="POST"
-        >
-            <button type="submit">Accept Bet</button>
-        </form>
-        <% } %> <% }) %> <% } else { %>
-        <p>No open bets available.</p>
-        <% } %>
+  <h4><%= `Bet ID: ${bet._id}` %></h4>
+  <p>
+    <%=`${bet.userId.username} thinks ${bet.coinId} will be
+            ${bet.betType} after ${bet.betLength}Hr and is wagering ${bet.wager}
+            tokens!` %>
+  </p>
+  <form action="/betBoard/<%= user._id %>/acceptBet/<%= bet._id %>" method="POST">
+    <button type="submit">Accept Bet</button>
+  </form>
+  <% } %> <% }) %> <% } else { %>
+  <p>No open bets available.</p>
+  <% } %>
 
+  <h1>Your Active Bets</h1>
+  <% if (bets && bets.length > 0) { %> <% let activeBetsExist = false; %>
+  <% bets.forEach(bet => { %> <% if ((user._id ===
+        bet.userId._id.toString() && !bet.betResolved) || (user._id ===
+        bet.betAcceptedBy && !bet.betResolved)) { %>
+  <h4><%= `Bet ID: ${bet._id}` %></h4>
+  <p>
+    <%=`${bet.userId.username} thinks ${bet.coinId} will be
+            ${bet.betType} after ${bet.betLength}Hr and is wagering ${bet.wager}
+            tokens!` %>
+  </p>
+  <% activeBetsExist = true; %> <% }; %> <% }); %> <% if
+        (!activeBetsExist) { %>
+  <p>No bets posted or accepted yet.</p>
+  <% } %> <% } else { %>
+  <p>No bets posted or accepted yet.</p>
+  <% } %>
 
-        <h1>Your Active Bets</h1>
-        <% if (bets && bets.length > 0) { %> 
-        <% let activeBetsExist = false; %>
-        <% bets.forEach(bet => { %> 
-            <% if ((user._id === bet.userId._id.toString() && !bet.betResolved) || 
-               (user._id === bet.betAcceptedBy && !bet.betResolved)) { %>
-                <h4><%= `Bet ID: ${bet._id}` %></h4> 
-                <p><%=`${bet.userId.username} thinks ${bet.coinId} will be ${bet.betType} after ${bet.betLength}Hr and is wagering ${bet.wager} tokens!` %></p>
-                <% activeBetsExist = true; %>
-            <% }; %> 
-        <% }); %> 
-        <% if (!activeBetsExist) { %>
-            <p>No bets posted or accepted yet.</p>
-        <% } %>
-        <% } else { %>
-            <p>No bets posted or accepted yet.</p>
-        <% } %>
+  <h1>Your Bet History</h1>
+  <% if (bets && bets.length > 0) { %> <% let historyExists = false; %> <%
+        bets.forEach(bet => { %> <% if ((user._id === bet.userId._id.toString()
+        && bet.betResolved) || (user._id === bet.betAcceptedBy &&
+        bet.betResolved)) { %> <% historyExists = true; %> <% if (user._id ===
+        bet.betWinner) { %>
+  <h4><%=`Win! Bet ID: ${bet._id}`%></h4>
+  <% } else { %>
+  <h4><%=`Lose! Bet ID: ${bet._id}`%></h4>
+  <% } %>
+  <p>
+    <%= `${bet.coinId} ${bet.betType} ${bet.betLength}Hr for
+            ${bet.wager} tokens!` %>
+  </p>
+  <p>
+    <%= `Start time: ${bet.betStartTime} Starting price:
+            $${bet.betStartPrice}`%>
+  </p>
+  <p>
+    <%= `End time: ${bet.betEndTime} Ending price:
+            $${bet.betEndPrice}`%>
+  </p>
+  <% } %> <% }) %> <% if (!historyExists) { %>
+  <p>No bet history available.</p>
+  <% } %> <% } else { %>
+  <p>No bet history available.</p>
+  <% } %>
+</body>
 
-
-
-        <h1>Your Bet History</h1>
-        <% if (bets && bets.length > 0) { %> 
-        <% let historyExists = false; %>
-        <% bets.forEach(bet => { %> 
-        <% if ((user._id === bet.userId._id.toString() && bet.betResolved) || 
-               (user._id === bet.betAcceptedBy && bet.betResolved)) { %>
-            <% historyExists = true; %>
-            <% if (user._id === bet.betWinner) { %>
-                <h4><%=`Win! Bet ID: ${bet._id}`%></h4>
-            <% } else { %>
-                <h4><%=`Lose! Bet ID: ${bet._id}`%></h4>
-            <% } %>
-            <p><%= `${bet.coinId} ${bet.betType} ${bet.betLength}Hr for ${bet.wager} tokens!` %></p>
-                <p><%= `Start time: ${bet.betStartTime} Starting price: $${bet.betStartPrice}`%></p>
-                <p><%= `End time: ${bet.betEndTime} Ending price: $${bet.betEndPrice}`%></p>
-        <% } %>
-    <% }) %> 
-    <% if (!historyExists) { %>
-        <p>No bet history available.</p>
-    <% } %>
-        <% } else { %>
-        <p>No bet history available.</p>
-    <% } %>
-
-        
-        
-    </body>
 </html>

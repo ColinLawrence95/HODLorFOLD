@@ -10,6 +10,7 @@ const port = process.env.PORT ? process.env.PORT : "3000";
 const authController = require("./controllers/auth.js");
 const dashboardController = require("./controllers/dashboard.js");
 const betBoardController = require("./controllers/betBoard.js");
+const Bets = require("./models/bets.js");
 
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on("connected", function () {
@@ -25,9 +26,11 @@ app.use(
         saveUninitialized: true,
     })
 );
-app.get("/", function (req, res) {
+app.get("/", async function (req, res) {
+    const topBets = await Bets.find({ betPostTime: { $exists: true }, betInProgress: false, betResolved: false });
     res.render("index.ejs", {
         user: req.session.user,
+        topBets: topBets,
     });
 });
 
