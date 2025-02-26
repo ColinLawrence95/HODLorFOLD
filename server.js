@@ -11,11 +11,13 @@ const authController = require("./controllers/auth.js");
 const dashboardController = require("./controllers/dashboard.js");
 const betBoardController = require("./controllers/betBoard.js");
 const Bets = require("./models/bets.js");
+const fetchCryptoPrices = require("./cronJobs/fetchPrice.js")
 
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on("connected", function () {
     console.log(`Connected to MONGODB ${mongoose.connection.name}`);
 });
+app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));
@@ -27,7 +29,7 @@ app.use(
     })
 );
 app.get("/", async function (req, res) {
-    const topBets = await Bets.find({ betPostTime: { $exists: true }, betInProgress: false, betResolved: false });
+    const topBets = await Bets.find({ betPostTime: { $exists: true }, betInProgress: false, betResolved: false }).populate("userId", "username");
     res.render("index.ejs", {
         user: req.session.user,
         topBets: topBets,

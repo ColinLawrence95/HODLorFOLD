@@ -1,0 +1,262 @@
+/* Navbar Styling */
+@import url("https://fonts.googleapis.com/css2?family=Arsenal+SC:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #bb0000;
+    padding: 0px 2px;
+    color: white;
+    position: relative;
+    border-radius: 10px;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: white;
+    padding: 0px 30px;
+}
+
+.auth-links {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.sign-in,
+.sign-up {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 8px 20px 8px 20px;
+    font-family: "Arsenal SC", system-ui;
+    font-size: 20px;
+    font-weight: bolder;
+    color: rgba(0, 0, 0, 0.87);
+}
+button.sign-in {
+    margin-left: 10px;
+    background-color: #ffffff;
+    border: 3px ridge #ff0000;
+}
+button.sign-up {
+    margin-right: 10px;
+    background-color: #ffffff;
+    border: 3px ridge #ff0000;
+}
+.top-bets-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    flex-wrap: wrap; 
+    gap: 30px; 
+    margin-bottom: 20px;
+
+}
+.top-bets {
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    background-color:#dfdfdf;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    position: relative; 
+    width: 200px; 
+    margin: 5px 0px;
+    font-size: 20px;
+
+}
+.top-bets::after,
+.top-bets::before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: red;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: -1;
+    padding:4px;
+    border-radius: 10px;
+    background: conic-gradient(
+        from var(--angle) at 50% 50%,
+        #003f5b,
+        #644e98,
+        #bb56ac,
+        #f37b7c,
+        #e6a100,
+        #96ff40,
+        #3589aa,
+        #1308a8,
+        #003f5b
+    );
+    animation: 3s spin linear infinite;
+    margin-bottom: 10px;
+}
+.top-bets::before {
+    filter: blur(1.5rem);
+    opacity: 0.5;
+}
+
+.desc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.desc-title-container {
+    display: flex;
+    justify-content: center;
+}
+#title {
+    font-size: 50px;
+    margin: 5px;
+}
+#top-bets-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+}
+#username{
+    font-weight: bolder;
+}
+#top-bets-tokens{
+    font-weight: bold;
+}
+#desc-title {
+    color: #000000;
+    border-bottom: 4px solid #bb0000;
+    display: inline-block;
+    padding: 20px 0 5px 0;
+    margin: 0 auto;
+}
+#desc-text{
+    font-size: 20px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: "Arsenal SC", system-ui;
+    background: linear-gradient(
+            45deg,
+            #ffffff 0%,
+            #ffffff 5%,
+            transparent 5%,
+            transparent 10%,
+            #ffffff 10%,
+            #ffffff 15%,
+            transparent 15%,
+            transparent 20%,
+            #ffffff 20%,
+            #ffffff 25%,
+            transparent 25%,
+            transparent 30%,
+            #ffffff 30%,
+            #ffffff 35%,
+            transparent 35%,
+            transparent 40%,
+            #ffffff 40%,
+            #ffffff 45%,
+            transparent 45%,
+            transparent 50%,
+            #ffffff 50%,
+            #ffffff 55%,
+            transparent 55%,
+            transparent 60%,
+            #ffffff 60%,
+            #ffffff 65%,
+            transparent 65%,
+            transparent 70%,
+            #ffffff 70%,
+            #ffffff 75%,
+            transparent 70%,
+            transparent 80%,
+            #ffffff 80%,
+            #ffffff 85%,
+            transparent 85%,
+            transparent 90%,
+            #ffffff 90%,
+            #ffffff 95%,
+            transparent 95%
+        ),
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #ffffff 5%,
+            transparent 5%,
+            transparent 10%,
+            #ffffff 10%,
+            #ffffff 15%,
+            transparent 15%,
+            transparent 20%,
+            #ffffff 20%,
+            #ffffff 25%,
+            transparent 25%,
+            transparent 30%,
+            #ffffff 30%,
+            #ffffff 35%,
+            transparent 35%,
+            transparent 40%,
+            #ffffff 40%,
+            #ffffff 45%,
+            transparent 45%,
+            transparent 50%,
+            #ffffff 50%,
+            #ffffff 55%,
+            transparent 55%,
+            transparent 60%,
+            #ffffff 60%,
+            #ffffff 65%,
+            transparent 65%,
+            transparent 70%,
+            #ffffff 70%,
+            #ffffff 75%,
+            transparent 70%,
+            transparent 80%,
+            #ffffff 80%,
+            #ffffff 85%,
+            transparent 85%,
+            transparent 90%,
+            #ffffff 90%,
+            #ffffff 95%,
+            transparent 95%
+        );
+    background-size: 6em 6em;
+    background-color: #fcfcfc;
+    opacity: 1;
+}
+p{
+    margin: 5px 0px;
+}
+button{
+    margin-top: 5px;
+    border: 3px ridge #bb0000;
+    color: rgb(0, 0, 0);
+    padding: 5px 10px 5px 10px;
+    border-radius: 8px;
+    font-weight: bolder;
+}
+button:hover{
+    cursor: pointer;
+}
+@property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+@keyframes spin {
+    from {
+        --angle: 0deg;
+    }
+    to {
+        --angle: 360deg;
+    }
+}

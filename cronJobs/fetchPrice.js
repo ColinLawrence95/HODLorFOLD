@@ -31,7 +31,12 @@ const fetchCryptoPrices = async () => {
         console.error("Error fetching crypto prices:", error);
     }
 };
-cron.schedule("*/10 * * * *", () => {
-    fetchCryptoPrices();
+cron.schedule("*/10 * * * *", async () => {
+    try{
+       await  fetchCryptoPrices();
+    } catch (error){
+        console.error("Error running cron job: ")
+    }
+    
 });
 module.exports = fetchCryptoPrices;

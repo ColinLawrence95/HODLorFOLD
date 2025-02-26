@@ -4,33 +4,45 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="/style.css" />
 	<title>HOLD or FOLD</title>
 </head>
 
 <body>
 	<%- include('./partials/_navbar.ejs') %>
-	<% if (user) { %>
-	<h1>Welcome to HOLD or FOLD, <%= user.username %>!</h1>
-	<% } else { %>
-	<h1>Welcome to HOLD or FOLD</h1>
-	<% } %>
-
-	<h3>Top Bets</h3>
+	<h3 id="top-bets-title">Top Bets</h3>
 	<% if (topBets.length > 0) { %>
-	<% topBets.forEach(bet => { %>
-	<p>
-		<%= `Bet ID: ${bet._id} ${bet.coinId} ${bet.betType} in ${bet.betLength}hr ${bet.wager} tokens` %>
-		<% if (user) { %>
-		<a href="/betBoard/<%= user._id %>"><button>Bet Against</button></a>
-		<% } else { %>
-		<a href="/auth/sign-in"><button>Bet Against</button></a>
-		<% } %>
+	<div class="top-bets-container">
+		<% topBets.forEach(bet => { %>
+		<div class="top-bets">
+			<p id="username"><%= bet.userId.username %></p>
+			<p><%= bet.coinId %> <%= bet.betType %> in <%= bet.betLength %> hr</p>
+			<p id="top-bets-tokens"><%= bet.wager %> tokens</p>
 
-	</p>
-	<% }); %>
+			<div>
+				<% if (user) { %>
+				<a href="/betBoard/<%= user._id %>"><button>Bet Against</button></a>
+				<% } else { %>
+				<a href="/auth/sign-in"><button>Bet Against</button></a>
+				<% } %>
+			</div>
+		</div>
+		<% }); %>
+	</div>
 	<% } else { %>
 	<p>No active bets available.</p>
 	<% } %>
+
+	<div class="desc-title-container">
+		<h1 class="desc" id="desc-title">Welcome to HOLD or FOLD </h1>
+	</div>
+	<p class="desc" id="desc-text">where crypto enthusiasts like you take their predictions to the next level! Dive into the thrilling world of digital currencies,
+		place daring bets on whether your favorite coins will rise or fall, and compete against others in a fast-paced, high-stakes environment.
+		Will you hold strong and watch your tokens grow, or fold under pressure? Track real-time market prices, test your intuition, and make every bet count.
+		The world of crypto betting awaits — are you ready?
+	</p>
+
+
 </body>
 
 
