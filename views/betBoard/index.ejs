@@ -50,7 +50,7 @@
         <% } %>
 
 
-        
+
         <h1>Your Bet History</h1>
         <% if (bets && bets.length > 0) { %> 
         <% let historyExists = false; %>
@@ -59,9 +59,9 @@
                (user._id === bet.betAcceptedBy && bet.betResolved)) { %>
             <% historyExists = true; %>
             <% if (user._id === bet.betWinner) { %>
-                <h2>Won</h2>
+                <h2><%=`Win! Bet ID: ${bet._id}`%></h2>
             <% } else { %>
-                <h2>Lost</h2>
+                <h2><%=`Lose! Bet ID: ${bet._id}`%></h2>
             <% } %>
             <p><%= `Vs ${bet.userId.username}: ${bet.coinId} ${bet.betType} ${bet.betLength}Hr for ${bet.wager} tokens!` %></p>
                 <p><%= `Start time: ${bet.betStartTime} Starting price: $${bet.betStartPrice}`%></p>
