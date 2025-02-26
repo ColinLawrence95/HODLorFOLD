@@ -5,12 +5,12 @@ const User = require("../models/user.js");
 
 router.get("/sign-up", (req, res) => {
     user = req.session.user;
-    res.render("auth/sign-up.ejs", { whatPage: "signup" });
+    res.render("auth/sign-up.ejs", { whatPage: "sign-up" });
    
 });
 router.get("/sign-in", (req, res) => {
     user = req.session.user;
-    res.render("auth/sign-in.ejs");
+    res.render("auth/sign-in.ejs", { whatPage: "sign-in" });
    
 });
 router.get("/sign-out", (req, res) => {

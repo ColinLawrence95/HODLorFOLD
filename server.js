@@ -11,7 +11,8 @@ const authController = require("./controllers/auth.js");
 const dashboardController = require("./controllers/dashboard.js");
 const betBoardController = require("./controllers/betBoard.js");
 const Bets = require("./models/bets.js");
-const fetchCryptoPrices = require("./cronJobs/fetchPrice.js")
+const fetchCryptoPrices = require("./cronJobs/fetchPrice.js");
+const User = require("./models/user.js");
 
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on("connected", function () {

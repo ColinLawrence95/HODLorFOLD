@@ -1,17 +1,28 @@
 <nav class="navbar">
 	<% if (user) { %>
 	<div class="nav-links">
-		<a href="/">Home</a>
-		<a href="/auth/sign-out">Sign Out</a>
-		<a href="/dashboard/<%= user._id %>">Dashboard</a>
-		<a href="/betBoard/<%= user._id %>">Bet Board</a>
-		<p>Tokens: <%= user.tokens %></p>
+        <div class="user-info">
+        <p >hello <%= user.username %></p>
+        <p>Tokens: <%= user.tokens %></p>
+        </div>
+        <a href="/betBoard/<%= user._id %>"><button>Bet Board</button></a>
+        <a href="/"><h1 id="title">HOLD or FOLD</h1></a>
+		<a href="/dashboard/<%= user._id %>"><button>Dashboard</button></a>
+        <a href="/auth/sign-out"><button>Sign Out</button></a>
+		
 	</div>
-	<% } else if (whatPage === "signup") { %>
+	<% } else if (whatPage === "sign-up") { %>
 	<a href="/" class="home"> <button class="home">Home</button> </a>
-	<h1 id="title">HOLD or FOLD</h1>
+	<a href="/"><h1 id="title">HOLD or FOLD</h1></a>
 	<a href="/auth/sign-in" class="sign-in"><button class="sign-in">Sign In</button></a>
-	<% } else { %>
+
+	<% } else if (whatPage === "sign-in") { %>
+        <a href="/" class="home"> <button class="home">Home</button> </a>
+        <a href="/"><h1 id="title">HOLD or FOLD</h1></a>
+        <a href="/auth/sign-up" class="sign-up"><button class="sign-up">Sign Up</button></a>
+    
+    
+    <% } else { %>
 	<div class="auth-links">
 		<a href="/auth/sign-up" class="sign-up"><button class="sign-up">Sign Up</button></a>
 		<h1 id="title">HOLD or FOLD</h1>

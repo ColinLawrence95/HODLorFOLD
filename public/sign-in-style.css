@@ -22,7 +22,11 @@
     display: flex;
     justify-content: space-between;
 }
-.sign-in,
+#title {
+    font-size: 50px;
+    margin: 5px;
+}
+.sign-up,
 .home {
     display: flex;
     align-items: center;
@@ -37,11 +41,10 @@
 .home{
     padding: 8px 28px 8px 28px;
 }
-button.sign-in {
+button.sign-up {
     margin-left: 10px;
     background-color: #ffffff;
     border: 3px ridge #ff0000;
-    padding: 8px 22px 8px 23px;
 }
 button.home {
     margin-right: 10px;
@@ -57,7 +60,12 @@ button.home {
     margin: 0 auto;
     gap: 10px
 }
-#sign-up{
+#title-sign-in{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#sign-in{
     margin: 10px 0 0 0;
     padding: 8px 20px 8px 20px;
     margin-right: 10px;
@@ -66,20 +74,6 @@ button.home {
     font-size: 20px;
     font-weight: bold;
     border-radius: 8px;
-}
-#title {
-    font-size: 50px;
-    margin: 5px;
-}
-#title-create-account{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-}
-label{
-    font-size: 15px;
-    font-weight: bold;
 }
 body{
     display: flex;
@@ -172,6 +166,10 @@ body{
     background-size: 6em 6em;
     background-color: #fcfcfc;
     opacity: 1;
+}
+label{
+    font-size: 15px;
+    font-weight: bold;
 }
 button{
     font-family: "Arsenal SC", system-ui;
