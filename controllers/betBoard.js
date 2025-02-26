@@ -100,6 +100,7 @@ router.post("/acceptBet/:betId", async function (req, res) {
         bet.betInProgress = true;
         bet.betAcceptedBy = userSession._id;
         bet.betStartPrice = startPrice;
+        bet.betStartTime = Date.now();
         await user.save();
         await userPosted.save();
         await bet.save();
@@ -156,6 +157,8 @@ async function betTimer(betId, userPosted) {
     updatedBet.betResolved = true;
     updatedBet.betInProgress = false;
     updatedBet.betEndPrice = endPrice;
+    updatedBet.betWinner = winner;
+    updatedBet.betEndTime = Date.now();
 
     await updatedBet.save();
 

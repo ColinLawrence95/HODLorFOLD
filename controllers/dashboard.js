@@ -1,6 +1,6 @@
 const express = require("express");
 const axios = require("axios");
-const coinPriceHistory = require("../models/coinPriceHistory")
+const coinPriceHistory = require("../models/coinPriceHistory");
 const router = express.Router();
 const User = require("../models/user");
 
@@ -9,10 +9,11 @@ router.get("/", async (req, res) => {
     const userInDB = await User.findById(user._id);
     let coinSearch = req.query.coinSearch || "bitcoin";
     coinSearch = coinSearch.toLowerCase();
-    if(!user){
+    if (!user) {
         return res.redirect("/auth/sign-in");
     }
     user.tokens = userInDB.tokens;
+    
     try {
         const response = await axios.get(
             "https://api.coingecko.com/api/v3/simple/price",
@@ -36,23 +37,23 @@ router.get("/", async (req, res) => {
         res.redirect("/");
     }
 });
+
 async function getHistoricalData(coinId) {
     try {
-        // Query the database to get the historical data for the given coinId
-        const historicalData = await coinPriceHistory.find({ coinId: coinId })
-            .sort({ timestamp: 1 }) // Sort by timestamp in ascending order (oldest first)
-            .select('timestamp price'); // Only select the relevant fields
+        const historicalData = await coinPriceHistory
+            .find({ coinId: coinId })
+            .sort({ timestamp: 1 })
+            .select("timestamp price");
 
-        // Check if historical data exists
         if (!historicalData || historicalData.length === 0) {
             throw new Error("No historical data found for this coin.");
         }
 
-        // Return the historical data
         return historicalData;
     } catch (error) {
         console.error("Error fetching historical data from database:", error);
-        throw error; // Rethrow the error to be caught by the caller
+        throw error;
     }
 }
+
 module.exports = router;
