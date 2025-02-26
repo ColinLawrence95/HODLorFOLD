@@ -17,10 +17,8 @@
         <% if (bets && bets.length > 0) { %> <% bets.forEach(bet => { %> <% if
         (!bet.betInProgress && !bet.betResolved && user._id !==
         bet.userId._id.toString()) { %>
-        <p>
-            <%= `${bet.userId.username} thinks ${bet.coinId} will be
-            ${bet.betType} after ${bet.betLength}Hr and is wagering ${bet.wager} tokens!` %>
-        </p>
+            <h4><%= `Bet ID: ${bet._id}` %></h4> 
+            <p><%=`${bet.userId.username} thinks ${bet.coinId} will be ${bet.betType} after ${bet.betLength}Hr and is wagering ${bet.wager} tokens!` %></p>
         <form
             action="/betBoard/<%= user._id %>/acceptBet/<%= bet._id %>"
             method="POST"
@@ -38,7 +36,8 @@
         <% bets.forEach(bet => { %> 
             <% if ((user._id === bet.userId._id.toString() && !bet.betResolved) || 
                (user._id === bet.betAcceptedBy && !bet.betResolved)) { %>
-                <p><%= `${bet.userId.username} thinks ${bet.coinId} will be ${bet.betType} after ${bet.betLength}Hr and is wagering ${bet.wager} tokens!` %></p>
+                <h4><%= `Bet ID: ${bet._id}` %></h4> 
+                <p><%=`${bet.userId.username} thinks ${bet.coinId} will be ${bet.betType} after ${bet.betLength}Hr and is wagering ${bet.wager} tokens!` %></p>
                 <% activeBetsExist = true; %>
             <% }; %> 
         <% }); %> 
@@ -59,11 +58,11 @@
                (user._id === bet.betAcceptedBy && bet.betResolved)) { %>
             <% historyExists = true; %>
             <% if (user._id === bet.betWinner) { %>
-                <h2><%=`Win! Bet ID: ${bet._id}`%></h2>
+                <h4><%=`Win! Bet ID: ${bet._id}`%></h4>
             <% } else { %>
-                <h2><%=`Lose! Bet ID: ${bet._id}`%></h2>
+                <h4><%=`Lose! Bet ID: ${bet._id}`%></h4>
             <% } %>
-            <p><%= `Vs ${bet.userId.username}: ${bet.coinId} ${bet.betType} ${bet.betLength}Hr for ${bet.wager} tokens!` %></p>
+            <p><%= `${bet.coinId} ${bet.betType} ${bet.betLength}Hr for ${bet.wager} tokens!` %></p>
                 <p><%= `Start time: ${bet.betStartTime} Starting price: $${bet.betStartPrice}`%></p>
                 <p><%= `End time: ${bet.betEndTime} Ending price: $${bet.betEndPrice}`%></p>
         <% } %>

@@ -1,6 +1,5 @@
 const express = require("express");
 const axios = require("axios");
-const coinPriceHistory = require("../models/coinPriceHistory");
 const Bets = require("../models/bets");
 const User = require("../models/user");
 const router = express.Router();

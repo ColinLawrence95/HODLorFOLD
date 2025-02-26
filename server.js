@@ -11,7 +11,6 @@ const authController = require("./controllers/auth.js");
 const dashboardController = require("./controllers/dashboard.js");
 const betBoardController = require("./controllers/betBoard.js");
 
-
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on("connected", function () {
     console.log(`Connected to MONGODB ${mongoose.connection.name}`);
