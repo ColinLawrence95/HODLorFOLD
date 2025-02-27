@@ -55,7 +55,7 @@
         bets.forEach(bet => { %> <% if ((user._id === bet.userId._id.toString()
         && bet.betResolved) || (user._id === bet.betAcceptedBy &&
         bet.betResolved)) { %> <% historyExists = true; %> <% if (user._id ===
-        bet.betWinner.toString();) { %>
+        bet.betWinner.toString()) { %>
 	<h4><%=`Win! Bet ID: ${bet._id}`%></h4>
 	<% } else { %>
 	<h4><%=`Lose! Bet ID: ${bet._id}`%></h4>
