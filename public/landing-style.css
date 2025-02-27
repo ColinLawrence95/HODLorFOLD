@@ -156,6 +156,8 @@ button.sign-up {
 }
 #username{
     font-weight: bolder;
+    font-size: 30px;
+    color: #ffb325;
 }
 #top-bets-tokens{
     font-weight: bold;
