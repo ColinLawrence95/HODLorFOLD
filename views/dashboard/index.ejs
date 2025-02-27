@@ -7,28 +7,34 @@
   <title><%=user.username%>'s Dashboard</title>
   <!-- Include Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="../dashboard-style.css" />
   <!-- Include chartjs-adapter-date-fns (for date handling in Chart.js) -->
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 </head>
 
 <body>
   <%- include('../partials/_navbar.ejs') %>
-  <h1><%=user.username%>'s Dashboard</h1>
-  <form action="/dashboard/<%= user._id %>" method="GET">
-    <input type="text" name="coinSearch" id="coinSearch" required placeholder="Search Coin" value="<%= coinSearch || '' %>" />
-    <button type="submit">Search</button>
-    <div>
-      <button id="1Day" onclick="updateChart('1Day')">1 Day</button>
-      <button id="1Week" onclick="updateChart('1Week')">1 Week</button>
-      <button id="1Month" onclick="updateChart('1Month')">1 Month</button>
-    </div>
-  </form>
-  <h2><%= coinSearch %> Price</h2>
+  <div class="top-row-container">
+  <h1 id="dashboard-title"><%=user.username%>'s Dashboard</h1> 
+  <div class="price-result-container">
+  <h2 id="price-coin-title"><%= coinSearch %> Price</h2>
   <p>Current Price: $<%= coinData[coinSearch].usd %></p>
+  </div>
   <p>Powered by <a href="https://www.coingecko.com/en/api">CoinGecko API</a></p>
+  </div>
+  <form action="/dashboard/<%= user._id %>" method="GET" class="coin-search">
+    <input type="text" name="coinSearch" id="coinSearch" required placeholder="Search Coin" value="<%= coinSearch || '' %>" />
+    <button id="search-button" type="submit">Search</button>
+    
+  </form>
+  <div class="graph-ui">
   <h3>Price History Graph</h3>
+ 
+    <button id="1Day" onclick="updateChart('1Day')">1 Day</button>
+    <button id="1Week" onclick="updateChart('1Week')">1 Week</button>
+  </div>
 
-  <canvas id="priceChart" width="600" height="200"></canvas>
+  <canvas id="priceChart" width="550" height="150"></canvas>
 
   <script>
     // Embed the historical data directly into the script
@@ -54,9 +60,7 @@
           return dataTime >= new Date(now - 24 * 60 * 60 * 1000);
         } else if (timePeriod === '1Week') {
           return dataTime >= new Date(now - 7 * 24 * 60 * 60 * 1000);
-        } else if (timePeriod === '1Month') {
-          return dataTime >= new Date(now - 30 * 24 * 60 * 60 * 1000);
-        }
+        } 
         return false;
       });
 
@@ -99,8 +103,8 @@
             datasets: [{
               label: 'Price (USD)',
               data: prices,
-              borderColor: "rgba(171, 36, 36)",
-              backgroundColor: "rgba(171, 36, 36, 0.2)",
+              borderColor: "rgb(255, 179, 37)",
+              backgroundColor: "rgb(255, 179, 37, 0.3)",
               fill: true,
             }]
           },
@@ -115,14 +119,28 @@
                 },
                 title: {
                   display: true,
-                  text: 'Time'
+                  text: 'Time',
+                  color: "#f1f1f1",
+                },
+                ticks: {
+                  color: "#f1f1f1",
+                },
+                grid: {
+                  color: "#f1f1f150",
                 }
               },
               y: {
                 title: {
                   display: true,
-                  text: 'Price (USD)'
-                }
+                  text: 'Price (USD)',
+                  color: "#f1f1f1"
+                },
+                ticks: {
+                  color: "#f1f1f1",
+                },
+                grid: {
+                  color: "#f1f1f150",
+                },
               }
             }
           }
@@ -132,7 +150,7 @@
 
     // Initialize with 1 Month data on page load
     document.addEventListener('DOMContentLoaded', function() {
-      updateChart('1Month');
+      updateChart('1Day');
     });
   </script>
 </body>

@@ -1,14 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Arsenal+SC:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Stalinist+One&display=swap');
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #bb0000;
+    background-color: #1f2333;
     padding: 0px 2px;
     color: white;
     position: relative;
     border-radius: 10px;
     border: 3px solid black;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 1);
+    max-height: 84px;
+    white-space: nowrap;
 }
 
 .navbar a {
@@ -22,10 +26,7 @@
     display: flex;
     justify-content: space-between;
 }
-#title {
-    font-size: 50px;
-    margin: 5px;
-}
+
 .sign-up,
 .home {
     display: flex;
@@ -33,23 +34,19 @@
     justify-content: center;
     border-radius: 8px;
     padding: 8px 20px 8px 20px;
-    font-family: "Arsenal SC", system-ui;
     font-size: 20px;
     font-weight: bolder;
-    color: rgba(0, 0, 0, 0.87);
 }
 .home{
     padding: 8px 28px 8px 28px;
 }
 button.sign-up {
     margin-left: 10px;
-    background-color: #ffffff;
-    border: 3px ridge #ff0000;
+  
 }
 button.home {
     margin-right: 10px;
-    background-color: #ffffff;
-    border: 3px ridge #ff0000;
+
 }
 .user-input{
     display: flex;
@@ -58,19 +55,27 @@ button.home {
     align-items: center;
     max-width: 300px;
     margin: 0 auto;
-    gap: 10px
+    gap: 10px;
+    color: #f1f1f1;
+}
+#title {
+    font-size: 50px;
+    margin: 5px;
+    color: #ffb325;
+    font-family: "Stalinist One", system-ui;
+    text-shadow: 0px 10px 20px rgba(0, 0, 0, 1);;
 }
 #title-sign-in{
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size:50px;
+    color: #f1f1f1;
+    text-shadow: 0px 10px 20px rgba(0, 0, 0, 1);
 }
 #sign-in{
-    margin: 10px 0 0 0;
+    margin: 30px 0 0 0;
     padding: 8px 20px 8px 20px;
-    margin-right: 10px;
-    background-color: #ffffff;
-    border: 3px ridge #ff0000;
     font-size: 20px;
     font-weight: bold;
     border-radius: 8px;
@@ -79,99 +84,22 @@ body{
     display: flex;
     flex-direction: column;
     font-family: "Arsenal SC", system-ui;
-    background: linear-gradient(
-            45deg,
-            #ffffff 0%,
-            #ffffff 5%,
-            transparent 5%,
-            transparent 10%,
-            #ffffff 10%,
-            #ffffff 15%,
-            transparent 15%,
-            transparent 20%,
-            #ffffff 20%,
-            #ffffff 25%,
-            transparent 25%,
-            transparent 30%,
-            #ffffff 30%,
-            #ffffff 35%,
-            transparent 35%,
-            transparent 40%,
-            #ffffff 40%,
-            #ffffff 45%,
-            transparent 45%,
-            transparent 50%,
-            #ffffff 50%,
-            #ffffff 55%,
-            transparent 55%,
-            transparent 60%,
-            #ffffff 60%,
-            #ffffff 65%,
-            transparent 65%,
-            transparent 70%,
-            #ffffff 70%,
-            #ffffff 75%,
-            transparent 70%,
-            transparent 80%,
-            #ffffff 80%,
-            #ffffff 85%,
-            transparent 85%,
-            transparent 90%,
-            #ffffff 90%,
-            #ffffff 95%,
-            transparent 95%
-        ),
-        linear-gradient(
-            135deg,
-            #ffffff 0%,
-            #ffffff 5%,
-            transparent 5%,
-            transparent 10%,
-            #ffffff 10%,
-            #ffffff 15%,
-            transparent 15%,
-            transparent 20%,
-            #ffffff 20%,
-            #ffffff 25%,
-            transparent 25%,
-            transparent 30%,
-            #ffffff 30%,
-            #ffffff 35%,
-            transparent 35%,
-            transparent 40%,
-            #ffffff 40%,
-            #ffffff 45%,
-            transparent 45%,
-            transparent 50%,
-            #ffffff 50%,
-            #ffffff 55%,
-            transparent 55%,
-            transparent 60%,
-            #ffffff 60%,
-            #ffffff 65%,
-            transparent 65%,
-            transparent 70%,
-            #ffffff 70%,
-            #ffffff 75%,
-            transparent 70%,
-            transparent 80%,
-            #ffffff 80%,
-            #ffffff 85%,
-            transparent 85%,
-            transparent 90%,
-            #ffffff 90%,
-            #ffffff 95%,
-            transparent 95%
-        );
-    background-size: 6em 6em;
-    background-color: #fcfcfc;
-    opacity: 1;
+    background-color: #1b213a;
+    background-image: url("data:image/svg+xml,%3Csvg width='84' height='48' viewBox='0 0 84 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h12v6H0V0zm28 8h12v6H28V8zm14-8h12v6H42V0zm14 0h12v6H56V0zm0 8h12v6H56V8zM42 8h12v6H42V8zm0 16h12v6H42v-6zm14-8h12v6H56v-6zm14 0h12v6H70v-6zm0-16h12v6H70V0zM28 32h12v6H28v-6zM14 16h12v6H14v-6zM0 24h12v6H0v-6zm0 8h12v6H0v-6zm14 0h12v6H14v-6zm14 8h12v6H28v-6zm-14 0h12v6H14v-6zm28 0h12v6H42v-6zm14-8h12v6H56v-6zm0-8h12v6H56v-6zm14 8h12v6H70v-6zm0 8h12v6H70v-6zM14 24h12v6H14v-6zm14-8h12v6H28v-6zM14 8h12v6H14V8zM0 8h12v6H0V8z' fill='%2323283d' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+    min-width: 1280px;
 }
 label{
     font-size: 15px;
     font-weight: bold;
 }
 button{
+    color: rgb(255, 255, 255);
+    padding: 8px 20px 8px 20px;
+    border-radius: 8px;
+    font-weight: bolder;
+    font-size: 15px;
+    background-color: #3a6dda; 
+    text-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
     font-family: "Arsenal SC", system-ui;
 }
 button:hover{
