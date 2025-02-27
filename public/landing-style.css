@@ -1,10 +1,11 @@
 /* Navbar Styling */
 @import url("https://fonts.googleapis.com/css2?family=Arsenal+SC:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Stalinist+One&display=swap');
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #1b213a;
+    background-color: #1f2333;
     padding: 0px 2px;
     color: white;
     position: relative;
@@ -50,18 +51,14 @@
     font-family: "Arsenal SC", system-ui;
     font-size: 20px;
     font-weight: bolder;
-    color: rgba(255, 255, 255, 1);
 }
 button.sign-in {
     margin-right: 10px;
-    background-color: #4f7ad8;
-    border: 3px ridge #000fdd;
     padding: 8px 22px 8px 23px;
 }
 button.sign-up {
     margin-left: 10px;
-    background-color: #4f7ad8;
-    border: 3px ridge #000fdd;
+    
 }
 .top-bets-container {
     display: flex;
@@ -72,20 +69,27 @@ button.sign-up {
     margin-bottom: 20px;
 
 }
+.top-bets:hover::after
+
+{
+    transform: scale(1.05);
+}
 .top-bets {
     display: flex;
     flex-direction: column; 
     justify-content: center;
     align-items: center;
     background-color:#1b213a;
-    color: rgb(255, 255, 255);
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    color: #f1f1f1;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
     padding: 20px;
     border-radius: 8px;
     position: relative; 
     width: 200px; 
     margin: 5px 0px;
     font-size: 20px;
+    text-shadow: 0px 10px 20px rgba(0, 0, 0, 1);;
+   
 
 }
 .top-bets::after,
@@ -114,6 +118,7 @@ button.sign-up {
         #003f5b
     );
     animation: 3s spin linear infinite;
+    transition: transform 0.3s ease-in-out;
     margin-bottom: 10px;
 }
 .top-bets::before {
@@ -137,13 +142,17 @@ button.sign-up {
 #title {
     font-size: 50px;
     margin: 5px;
+    color: #ffb325;
+    font-family: "Stalinist One", system-ui;
+    text-shadow: 0px 10px 20px rgba(0, 0, 0, 1);;
 }
 #top-bets-title{
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size:40px;
-    color: #ffffff;
+    font-size:50px;
+    color: #f1f1f1;
+    text-shadow: 0px 10px 20px rgba(0, 0, 0, 1);
 }
 #username{
     font-weight: bolder;
@@ -153,15 +162,17 @@ button.sign-up {
     margin-bottom: 15px;
 }
 #desc-title {
-    color: #ffffff;
+    color: #f1f1f1;
     border-bottom: 4px solid #4f7ad8;
     display: inline-block;
     padding: 20px 0 5px 0;
     margin: 0 auto;
+    text-shadow: 0px 10px 20px rgba(0, 0, 0, 1);
 }
 #desc-text{
     font-size: 20px;
-    color: #ffffff;
+    color: #f1f1f1;
+    
 }
 
 body {
@@ -174,15 +185,18 @@ background-image: url("data:image/svg+xml,%3Csvg width='84' height='48' viewBox=
 }
 p{
     margin: 5px 0px;
+    display: inline;
+    text-shadow: 0px 10px 20px rgba(0, 0, 0, 1);
+    
 }
 button{
-    border: 3px ridge #000fdd;
     color: rgb(255, 255, 255);
     padding: 8px 20px 8px 20px;
     border-radius: 8px;
     font-weight: bolder;
     font-size: 15px;
-    background-color: #4f7ad8; 
+    background-color: #3a6dda; 
+    text-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
 }
 button:hover{
     cursor: pointer;

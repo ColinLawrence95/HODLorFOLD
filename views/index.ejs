@@ -10,14 +10,14 @@
 
 <body>
 	<%- include('./partials/_navbar.ejs') %>
-	<h3 id="top-bets-title">Top Bets</h3>
+	<h3 id="top-bets-title">TOP BETS</h3>
 	<% if (topBets.length > 0) { %>
 	<div class="top-bets-container">
 		<% topBets.forEach(bet => { %>
 		<div class="top-bets">
 			<p id="username"><%= bet.userId.username %></p>
 			<p><%= bet.coinId %> <%= bet.betType %> in <%= bet.betLength %> hr</p>
-			<p id="top-bets-tokens"><%= bet.wager %> tokens</p>
+			<p id="top-bets-tokens"><%= bet.wager %> 🪙</p>
 
 			<div>
 				<% if (user) { %>
