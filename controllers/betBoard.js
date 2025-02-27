@@ -122,7 +122,7 @@ module.exports = router;
 async function betTimer(betId, userPosted) {
     const updatedBet = await Bets.findById(betId);
     if (!updatedBet || updatedBet.betResolved) return;
-
+    
     const endResponse = await axios.get(
         "https://api.coingecko.com/api/v3/simple/price",
         {
