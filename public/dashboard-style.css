@@ -81,6 +81,10 @@
 #price-coin-title{
     margin: 0;
     color: #f1f1f1;
+    font-size: 30px;
+}
+#current-price{
+    font-size: 25px;
 }
 #title {
     font-size: 50px;
@@ -88,6 +92,10 @@
     color: #ffb325;
     font-family: "Stalinist One", system-ui;
     text-shadow: 0px 10px 20px rgba(0, 0, 0, 1);
+    transition: transform 0.3s ease-in-out;
+}
+#title:hover{
+    transform: scale(1.1);
 }
 #dashboard-title{
     display: flex;
@@ -126,7 +134,8 @@ button{
     text-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
 }
 p{
-    margin: 5px 0px;
+    font-family: "Arsenal SC", system-ui;
+    margin: 0px 0px;
     display: inline;
     text-shadow: 0px 10px 20px rgba(0, 0, 0, 1);
     color: #f1f1f1

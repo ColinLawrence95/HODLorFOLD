@@ -35,7 +35,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 0 0 0 10px;
+    margin: 0 0 0 0;
     font-weight: bolder;
 }
 .auth-links {
@@ -164,10 +164,11 @@ button.sign-up {
     font-size: 30px;
     color: #ffb325;
     animation:3s flashDescTitle linear infinite;
+    margin: 10px 0 20px 0;
 }
 #top-bets-tokens{
     font-weight: bold;
-    margin-bottom: 15px;
+    margin: 35px 0 35px 0;
 }
 #desc-title {
     color: #f1f1f1;
@@ -193,7 +194,9 @@ body {
     min-width: 1280px;
     
 }
-
+p {
+    margin: 0 0 0 0;
+}
 button{
     color: #f1f1f1;
     padding: 8px 20px 8px 20px;
