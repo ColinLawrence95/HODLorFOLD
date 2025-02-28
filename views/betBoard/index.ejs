@@ -51,32 +51,19 @@
 	<% } %>
 
 	<h1>Your Bet History</h1>
-	<% if (bets && bets.length > 0) { %> <% let historyExists = false; %> <%
-        bets.forEach(bet => { %> <% if ((user._id === bet.userId._id.toString()
-        && bet.betResolved) || (user._id === bet.betAcceptedBy &&
-        bet.betResolved)) { %> <% historyExists = true; %> <% if (user._id ===
-        bet.betWinner._id) { %>
-	<h4><%=`Win! Bet ID: ${bet._id}`%></h4>
-	<% } else { %>
-	<h4><%=`Lose! Bet ID: ${bet._id}`%></h4>
-	<% } %>
-	<p>
-		<%= `${bet.coinId} ${bet.betType} ${bet.betLength}Hr for
-            ${bet.wager} tokens!` %>
-	</p>
-	<p>
-		<%= `Start time: ${bet.betStartTime} Starting price:
-            $${bet.betStartPrice}`%>
-	</p>
-	<p>
-		<%= `End time: ${bet.betEndTime} Ending price:
-            $${bet.betEndPrice}`%>
-	</p>
-	<% } %> <% }) %> <% if (!historyExists) { %>
-	<p>No bet history available.</p>
-	<% } %> <% } else { %>
-	<p>No bet history available.</p>
-	<% } %>
+	<% if (bets && bets.length > 0) { %> 
+    <% bets.forEach(bet => { %> 
+        <% if (bet.betResolved && user._id === bet.betWinner) { %>
+            <h3>Win! 🪙<%= bet.wager %> VS <%= bet.betAcceptedBy === user._id ? bet.userId.username : bet.userId.username%></h3>
+            <p>Bet: <%= bet._id %></p> 
+        <% } else if (bet.betResolved && user._id !== bet.betWinner) { %>
+            <h3>Lose! 🪙<%= bet.wager %> VS <%= bet.betAcceptedBy === user._id ? bet.userId.username : bet.betAcceptedBy.username%></h3>
+            <p>Bet: <%= bet._id %></p> 
+        <% } %>
+    <% }); %>
+<% } %>
+
+
 </body>
 
 </html>

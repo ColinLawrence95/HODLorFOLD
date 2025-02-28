@@ -23,27 +23,25 @@ setInterval(async () => {
 router.get("/", isUserSignedIn, async function (req, res) {
     const user = req.session.user;
     const userInDB = await User.findById(user._id);
-    const bets = await Bets.find().populate("userId", "username");
-    if (!user) {
-        return res.redirect("/auth/sign-in");
-    }
+    const bets = await Bets.find()
+        .populate("userId", "username")  
+        .populate("betAcceptedBy", "username"); 
+    
+    
+     
     user.tokens = userInDB.tokens;
     res.render("betBoard/index.ejs", { user, bets });
 });
 
 router.get("/newBet", isUserSignedIn, async function (req, res) {
     const user = req.session.user;
-    if (!user) {
-        return res.redirect("/auth/sign-in");
-    }
+ 
     res.render("betBoard/newBet.ejs", { user });
 });
 
 router.get("/acceptBet/:betId", isUserSignedIn, async function (req, res) {
     const user = req.session.user;
-    if (!user) {
-        return res.redirect("/auth/sign-in");
-    }
+ 
     let betId = req.params.betId;
     let bet = await Bets.findById(betId).populate("userId", "username");
     res.render("betBoard/acceptBet.ejs", { user, bet });
@@ -52,9 +50,7 @@ router.get("/acceptBet/:betId", isUserSignedIn, async function (req, res) {
 router.post("/", isUserSignedIn, async function (req, res) {
     const user = req.session.user;
     const wager = req.body.wager;
-    if (!user) {
-        return res.redirect("/auth/sign-in");
-    }
+
     if (user.tokens < wager) {
         return res.send("Not Enough Tokens!");
     } else {
@@ -71,9 +67,7 @@ router.post("/", isUserSignedIn, async function (req, res) {
 router.post("/acceptBet/:betId", async function (req, res) {
     const userSession = req.session.user;
     const user = await User.findById(userSession._id);
-    if (!user) {
-        return res.redirect("/auth/sign-in");
-    }
+   
     const betId = req.params.betId;
     const bet = await Bets.findById(betId).populate("userId");
     const wager = bet.wager;
@@ -148,7 +142,8 @@ async function betTimer(betId, userPosted) {
         winner = updatedBet.betAcceptedBy;
     }
 
-    if (winner) {
+    if (winner && winner._id) {
+        winner = winner._id.toString();
         const winningUser = await User.findById(winner);
         winningUser.tokens += updatedBet.wager * 2; // Double the wagered amount
         await winningUser.save();

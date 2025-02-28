@@ -12,10 +12,7 @@ router.get("/", isUserSignedIn, async (req, res) => {
     let historicalData = [];
     const userInDB = await User.findById(user._id);
     let symbols = await CoinPriceHistory.distinct("symbol");
-
-    if (!user) {
-        return res.redirect("/auth/sign-in");
-    }
+    
     let currentPrice = await getCryptoPrice(coinSearch);
     historicalData = await getHistoricalData(coinId);
     user.tokens = userInDB.tokens;
