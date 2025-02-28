@@ -53,6 +53,7 @@
 	<h1>Your Bet History</h1>
 	<% if (bets && bets.length > 0) { %> 
     <% bets.forEach(bet => { %> 
+		<%if (user._id === bet.betId || user._id === bet.betAcceptedBy) {%>
         <% if (bet.betResolved && user._id === bet.betWinner) { %>
             <h3>Win! 🪙<%= bet.wager %> VS <%= bet.betAcceptedBy === user._id ? bet.userId.username : bet.userId.username%></h3>
             <p>Bet: <%= bet._id %></p> 
@@ -60,9 +61,8 @@
             <h3>Lose! 🪙<%= bet.wager %> VS <%= bet.betAcceptedBy === user._id ? bet.userId.username : bet.betAcceptedBy.username%></h3>
             <p>Bet: <%= bet._id %></p> 
         <% } %>
-    <% }); %>
-<% } %>
-
+   	 	<% }); %>
+	<% } %>
 
 </body>
 
