@@ -51,21 +51,19 @@
 	<% } %>
 
 	<h1>Your Bet History</h1>
-
-<% let userHasBets = false; %>
-
-<% bets.forEach(bet => { %>
-    <% if (bet.userId.toString() === user._id.toString() || bet.betAcceptedBy?.toString() === user._id.toString()) { %>
-        <% userHasBets = true; %>
-        <% if (user._id.toString() === bet.betWinner?.toString() && bet.betResolved) { %>
-            <h3>Win: 🪙 <%= bet.wager %> Bet: <%= bet._id %></h3>
-        <% } else if (user._id.toString() !== bet.betWinner?.toString() && bet.betResolved) { %>
-            <h3>Lose: 🪙 <%= bet.wager %> Bet: <%= bet._id %></h3>
+	<% bets.forEach(bet => { %>
+    <% if (bet.userId === user._id || bet.betAcceptedBy === user._id) { %>
+        <% if (bet.betResolved === true) { %>
+            <% if (user._id === bet.betWinner) { %>
+                <h3>Win: 🪙 <%= bet.wager %> Bet: <%= bet._id %></h3>
+            <% } else { %>
+                <h3>Lose: 🪙 <%= bet.wager %> Bet: <%= bet._id %></h3>
+            <% } %>
         <% } %>
     <% } %>
-<% }); %>
+<% }) %>
 
-<% if (!userHasBets) { %>
+<% if (!bets.some(bet => (bet.userId === user._id || bet.betAcceptedBy === user._id) && bet.betResolved === true)) { %>
     <p>No bets</p>
 <% } %>
 
