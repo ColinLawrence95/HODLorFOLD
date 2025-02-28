@@ -11,7 +11,7 @@ const fetchCryptoPrices = async () => {
                 params: {
                     vs_currency: "usd",
                     order: "market_cap_desc",
-                    per_page: 250,
+                    per_page: 20,
                     page: 1,
                     sparkline: false,
                 },
@@ -20,6 +20,7 @@ const fetchCryptoPrices = async () => {
         for (let coin of response.data) {
             await CoinPriceHistory.create({
                 coinId: coin.id,
+                symbol: coin.symbol,
                 price: coin.current_price,
                 timestamp: new Date(),
             });

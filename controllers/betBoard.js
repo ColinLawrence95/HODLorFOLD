@@ -2,6 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const Bets = require("../models/bets");
 const User = require("../models/user");
+const isUserSignedIn = require("../middleware/isUserSignedIn");
 const router = express.Router();
 
 setInterval(async () => {
@@ -13,14 +14,13 @@ setInterval(async () => {
             inProgress: false,
             betPostTime: { $lt: cutoffTime },
         });
-            console.log(`Deleted ${result.deletedCount} expired bets.`);
-
+        console.log(`Deleted ${result.deletedCount} expired bets.`);
     } catch (err) {
         console.error("Error deleting expired bets:", err);
     }
 }, 1 * 60 * 1000);
 
-router.get("/", async function (req, res) {
+router.get("/", isUserSignedIn, async function (req, res) {
     const user = req.session.user;
     const userInDB = await User.findById(user._id);
     const bets = await Bets.find().populate("userId", "username");
@@ -31,7 +31,7 @@ router.get("/", async function (req, res) {
     res.render("betBoard/index.ejs", { user, bets });
 });
 
-router.get("/newBet", async function (req, res) {
+router.get("/newBet", isUserSignedIn, async function (req, res) {
     const user = req.session.user;
     if (!user) {
         return res.redirect("/auth/sign-in");
@@ -39,7 +39,7 @@ router.get("/newBet", async function (req, res) {
     res.render("betBoard/newBet.ejs", { user });
 });
 
-router.get("/acceptBet/:betId", async function (req, res) {
+router.get("/acceptBet/:betId", isUserSignedIn, async function (req, res) {
     const user = req.session.user;
     if (!user) {
         return res.redirect("/auth/sign-in");
@@ -49,7 +49,7 @@ router.get("/acceptBet/:betId", async function (req, res) {
     res.render("betBoard/acceptBet.ejs", { user, bet });
 });
 
-router.post("/", async function (req, res) {
+router.post("/", isUserSignedIn, async function (req, res) {
     const user = req.session.user;
     const wager = req.body.wager;
     if (!user) {
@@ -122,7 +122,7 @@ module.exports = router;
 async function betTimer(betId, userPosted) {
     const updatedBet = await Bets.findById(betId);
     if (!updatedBet || updatedBet.betResolved) return;
-    
+
     const endResponse = await axios.get(
         "https://api.coingecko.com/api/v3/simple/price",
         {
