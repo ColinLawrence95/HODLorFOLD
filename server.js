@@ -14,6 +14,8 @@ const Bets = require("./models/bets.js");
 const fetchCryptoPrices = require("./cronJobs/fetchPrice.js");
 const User = require("./models/user.js");
 
+
+
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on("connected", function () {
     console.log(`Connected to MONGODB ${mongoose.connection.name}`);

@@ -11,7 +11,7 @@ const betSchema = new mongoose.Schema({
     betStartPrice: { type: Number },
     betEndPrice: { type: Number },
     betInProgress: { type: Boolean, default: false },
-    betResolved: { type: Boolean },
+    betResolved: { type: Boolean, default: false },
     betWinner: { type: String },
     betAcceptedBy: { type: String, ref: "User" },
 });

@@ -5,20 +5,6 @@ const User = require("../models/user");
 const isUserSignedIn = require("../middleware/isUserSignedIn");
 const router = express.Router();
 
-setInterval(async () => {
-    const THIRTY_MINUTES = 30 * 60 * 1000;
-    const cutoffTime = Date.now() - THIRTY_MINUTES;
-
-    try {
-        const result = await Bets.deleteMany({
-            inProgress: false,
-            betPostTime: { $lt: cutoffTime },
-        });
-        console.log(`Deleted ${result.deletedCount} expired bets.`);
-    } catch (err) {
-        console.error("Error deleting expired bets:", err);
-    }
-}, 1 * 60 * 1000);
 
 router.get("/", isUserSignedIn, async function (req, res) {
     const user = req.session.user;
@@ -26,22 +12,17 @@ router.get("/", isUserSignedIn, async function (req, res) {
     const bets = await Bets.find()
         .populate("userId", "username")  
         .populate("betAcceptedBy", "username"); 
-    
-    
-     
     user.tokens = userInDB.tokens;
     res.render("betBoard/index.ejs", { user, bets });
 });
 
 router.get("/newBet", isUserSignedIn, async function (req, res) {
     const user = req.session.user;
- 
     res.render("betBoard/newBet.ejs", { user });
 });
 
 router.get("/acceptBet/:betId", isUserSignedIn, async function (req, res) {
     const user = req.session.user;
- 
     let betId = req.params.betId;
     let bet = await Bets.findById(betId).populate("userId", "username");
     res.render("betBoard/acceptBet.ejs", { user, bet });
@@ -67,7 +48,6 @@ router.post("/", isUserSignedIn, async function (req, res) {
 router.post("/acceptBet/:betId", async function (req, res) {
     const userSession = req.session.user;
     const user = await User.findById(userSession._id);
-   
     const betId = req.params.betId;
     const bet = await Bets.findById(betId).populate("userId");
     const wager = bet.wager;
@@ -92,6 +72,7 @@ router.post("/acceptBet/:betId", async function (req, res) {
         userPosted.tokens -= wager;
         bet.betInProgress = true;
         bet.betAcceptedBy = userSession._id;
+        console.log(bet.betAcceptedBy)
         bet.betStartPrice = startPrice;
         bet.betStartTime = Date.now();
         await user.save();
@@ -101,7 +82,7 @@ router.post("/acceptBet/:betId", async function (req, res) {
 
         setTimeout(async () => {
             try {
-                await betTimer(bet._id, userPosted);
+                await betLogic(bet._id, userPosted);
             } catch (error) {
                 console.error("Error in bet timer:", error);
             }
@@ -110,10 +91,21 @@ router.post("/acceptBet/:betId", async function (req, res) {
         res.redirect(`/betBoard/${user._id}`);
     }
 });
-
+router.delete("/:betId", async function(req,res) {
+    const user = req.session.user;
+    try{
+       await Bets.findByIdAndDelete(req.params.betId);
+    
+    } catch (error){
+        console.log(error)
+        res.redirect(`/betBoard/${user._id}`);
+    }
+    res.redirect(`/betBoard/${user._id}`);
+    
+})
 module.exports = router;
 
-async function betTimer(betId, userPosted) {
+async function betLogic(betId, userPosted) {
     const updatedBet = await Bets.findById(betId);
     if (!updatedBet || updatedBet.betResolved) return;
 
