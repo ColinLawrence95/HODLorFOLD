@@ -42,7 +42,7 @@
     align-items: center;
 
 }
-.new-bet-title{
+#new-bet-title{
     display: flex;
     justify-content: center;
     align-items: center;
