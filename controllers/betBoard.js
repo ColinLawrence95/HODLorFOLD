@@ -25,9 +25,7 @@ router.get("/:userId/newBet", isUserSignedIn, async function (req, res) {
 });
 
 router.get(
-    "/:userId/acceptBet/:betId",
-    isUserSignedIn,
-    async function (req, res) {
+    "/:userId/acceptBet/:betId", isUserSignedIn,async function (req, res) {
         const user = req.session.user;
         let betId = req.params.betId;
         let bet = await Bets.findById(betId).populate("userId", "username");
@@ -123,7 +121,7 @@ router.put("/:userId/:betId", isUserSignedIn, async function (req, res) {
         }
         user.tokens += bet.wager;
         await user.save();
-        // Validate or filter req.body before updating
+    
         bet.set({
             coinId: req.body.coinSearch,
             betType: req.body.betType,
@@ -135,7 +133,7 @@ router.put("/:userId/:betId", isUserSignedIn, async function (req, res) {
         user.tokens -= bet.wager;
         await user.save();
 
-        // Get the user ID (assuming bet has a reference to user)
+        
         res.redirect(`/betBoard/${bet.userId}`);
     } catch (error) {
         console.error(error);
@@ -163,12 +161,11 @@ async function betLogic(betId, userPosted) {
     const updatedBet = await Bets.findById(betId);
     if (!updatedBet || updatedBet.betResolved) return;
 
-    // Await the result of fetchCoinPrice to ensure endPrice is resolved
+
     let endPrice = await fetchCoinPrice(updatedBet);
 
-    if (endPrice) {
         let winner;
-        // Check if the bet is "up" or "down" and if the end price matches the bet condition
+      
         if (
             updatedBet.betType === "up" &&
             endPrice > updatedBet.betStartPrice
@@ -182,29 +179,21 @@ async function betLogic(betId, userPosted) {
         } else {
             winner = updatedBet.betAcceptedBy;
         }
-
-        if (winner && winner._id) {
-            winner = winner._id.toString();
+            
             const winningUser = await User.findById(winner);
-            winningUser.tokens += updatedBet.wager * 2; // Double the wagered amount
+            winningUser.tokens += updatedBet.wager * 2; 
             await winningUser.save();
-        }
+            updatedBet.betResolved = true;
+            updatedBet.betInProgress = false;
+            updatedBet.betEndPrice = endPrice;
+            updatedBet.betWinner = winner;
+            updatedBet.betEndTime = Date.now();
+            await updatedBet.save();
 
-        // Mark the bet as resolved and update all relevant fields
-        updatedBet.betResolved = true;
-        updatedBet.betInProgress = false;
-        updatedBet.betEndPrice = endPrice;
-        updatedBet.betWinner = winner;
-        updatedBet.betEndTime = Date.now();
-        await updatedBet.save();
-
-        console.log(
-            `Bet ${updatedBet._id} resolved. Winner: ${winner || "No one"}`
-        );
-    } else {
-        console.log("Unable to fetch end price.");
-        res.redirect(`/`);
-    }
+            console.log(
+                `Bet ${updatedBet._id} resolved. Winner: ${winner || "No one"}`
+            );
+   
 }
 
 async function fetchCoinPrice(updatedBet) {
