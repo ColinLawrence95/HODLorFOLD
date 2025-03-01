@@ -107,7 +107,7 @@ router.post(
                     } catch (error) {
                         console.error("Error in bet timer:", error);
                     }
-                }, 0.2 * 60 * 1000);
+                }, bet.betLength * 60 * 1000);
             }
         }
     }
