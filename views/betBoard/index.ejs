@@ -65,7 +65,7 @@
         <div class="open-bets-container">
             <% let availableBets = false; %>
             <% bets.forEach(bet => { %>
-            <% if ((!bet.inProgress && !bet.betResolved) && (bet.userId.username !== user.username)) { %>
+            <% if (!bet.betInProgress && !bet.betResolved && user.username != bet.userId.username){ %>
             <% availableBets = true; %>
             <div class="open-bets">
                 <p id="username"><%= bet.userId.username %></p>

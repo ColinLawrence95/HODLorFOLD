@@ -31,7 +31,7 @@ router.post("/", isUserSignedIn, async function (req, res) {
     let coinSearch = req.body.coinSearch;
     console.log("coinSearch value received from form:", coinSearch);
 
-    // Fetch symbols to show in the form again
+
     const symbols = await CoinPriceHistory.distinct("symbol");
 
     let coinId;

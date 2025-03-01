@@ -4,31 +4,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/newBet-style.css" />
   <title>Sign In</title>
 </head>
 
 <body>
   <%- include('../partials/_navbar.ejs') %>
-  <h1>Edit Bet</h1> 
- <form action="/betBoard/<%= user._id %>/<%= bet._id %>?_method=PUT" method="POST">
-		<select name="coinSearch" id="coinSearch">
-			<% symbols.forEach(symbol => { %>
-				<option value="<%= symbol %>" <%= symbol === coinSearch ? 'selected' : '' %>><%= symbol %></option>
-			<% }); %>
-		</select>
-    <select name="betType">
-      <option value="up">Up</option>
-      <option value="down">Down</option>
-    </select>
-    <label for="wager">Wager</label>
-    <input type="text" name="wager" id="wager" required />
-    <select name="betLength">
-      <option value="1">1 Hour</option>
-      <option value="4">4 Hour</option>
-      <option value="8">8 Hour</option>
-    </select>
-    <button type="submit">Update Bet</button>
-
+  <h1 class="new-bet-title">Edit bet</h1>
+  <p class="new-net-title"><%= bet._id %></p>
+  
+  <form action="/betBoard/<%= user._id %>/<%= bet._id %>?_method=PUT" method="POST">
+      <div class="user-input">
+      <label for="coinSearch">Select Coin</label>
+        <select name="coinSearch" id="coinSearch">
+          <% symbols.forEach(symbol => { %>
+            <option value="<%= symbol %>" <%= symbol === coinSearch ? 'selected' : '' %>><%= symbol %></option>
+          <% }); %>
+        </select>
+        <label for="betType">Up or Down?</label>
+      <select name="betType">
+        <option value="up">Up</option>
+        <option value="down">Down</option>
+      </select>
+      <label for="betLength">How Long?</label>
+      <select name="betLength">
+        <option value="1">1 Hour</option>
+        <option value="4">4 Hour</option>
+        <option value="8">8 Hour</option>
+      </select>
+      <label for="wager">Wager 🪙</label>
+      <input type="text" name="wager" id="wager" required />
+      <button type="submit">Post Bet</button>
+  </div>
   </form>
 </body>
 
