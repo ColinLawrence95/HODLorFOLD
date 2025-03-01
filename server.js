@@ -42,7 +42,7 @@ app.get("/", async function (req, res) {
 
 app.use("/dashboard/:userId", dashboardController);
 app.use("/auth", authController);
-app.use("/betBoard/:userId", betBoardController)
+app.use("/betBoard", betBoardController)
 
 app.listen(port, () => {
     console.log(`The express app is ready on port ${port}!`);

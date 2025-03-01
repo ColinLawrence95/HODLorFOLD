@@ -4,19 +4,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="../newBet-style.css" />
   <title>Sign In</title>
 </head>
 
 <body>
   <%- include('../partials/_navbar.ejs') %>
-  <h1>New Bet</h1>
-  <form action="/betBoard/<%= user._id %>" method="POST">
-      <select name="coinSearch" id="coinSearch">
-        <% symbols.forEach(symbol => { %>
-          <option value="<%= symbol %>" <%= symbol === coinSearch ? 'selected' : '' %>><%= symbol %></option>
-        <% }); %>
-      </select>
+  <h1>Edit Bet</h1> 
+ <form action="/betBoard/<%= user._id %>/<%= bet._id %>?_method=PUT" method="POST">
+		<select name="coinSearch" id="coinSearch">
+			<% symbols.forEach(symbol => { %>
+				<option value="<%= symbol %>" <%= symbol === coinSearch ? 'selected' : '' %>><%= symbol %></option>
+			<% }); %>
+		</select>
     <select name="betType">
       <option value="up">Up</option>
       <option value="down">Down</option>
@@ -28,7 +27,7 @@
       <option value="4">4 Hour</option>
       <option value="8">8 Hour</option>
     </select>
-    <button type="submit">Post Bet</button>
+    <button type="submit">Update Bet</button>
 
   </form>
 </body>

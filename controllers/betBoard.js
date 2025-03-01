@@ -2,11 +2,13 @@ const express = require("express");
 const axios = require("axios");
 const Bets = require("../models/bets");
 const User = require("../models/user");
+const CoinPriceHistory = require("../models/coinPriceHistory");
 const isUserSignedIn = require("../middleware/isUserSignedIn");
+
 const router = express.Router();
 
 
-router.get("/", isUserSignedIn, async function (req, res) {
+router.get("/:userId", isUserSignedIn, async function (req, res) {
     const user = req.session.user;
     const userInDB = await User.findById(user._id);
     const bets = await Bets.find()
@@ -16,19 +18,32 @@ router.get("/", isUserSignedIn, async function (req, res) {
     res.render("betBoard/index.ejs", { user, bets });
 });
 
-router.get("/newBet", isUserSignedIn, async function (req, res) {
+router.get("/:userId/newBet", isUserSignedIn, async function (req, res) {
+    let symbols = await CoinPriceHistory.distinct("symbol");
+    let coinSearch = req.body.coinSearch;
     const user = req.session.user;
-    res.render("betBoard/newBet.ejs", { user });
+    res.render("betBoard/newBet.ejs", { user, symbols, coinSearch });
 });
 
-router.get("/acceptBet/:betId", isUserSignedIn, async function (req, res) {
+router.get("/:userId/acceptBet/:betId", isUserSignedIn, async function (req, res) {
     const user = req.session.user;
     let betId = req.params.betId;
     let bet = await Bets.findById(betId).populate("userId", "username");
     res.render("betBoard/acceptBet.ejs", { user, bet });
 });
+router.get("/:userId/editBet/:betId", async function(req,res){
+    try{
+    let symbols = await CoinPriceHistory.distinct("symbol");
+    let coinSearch = req.body.coinSearch;
+    const user = req.session.user;
+    const bet = await Bets.findById(req.params.betId)
+    res.render("betBoard/editBet.ejs", {user, bet, whatPage: "edit", symbols, coinSearch})
+    } catch (error){
+        console.log(error)
+    }
 
-router.post("/", isUserSignedIn, async function (req, res) {
+});
+router.post("/:userId", isUserSignedIn, async function (req, res) {
     const user = await User.findById(req.session.user._id)
     const wager = req.body.wager;
 
@@ -37,6 +52,7 @@ router.post("/", isUserSignedIn, async function (req, res) {
     } else {
         await Bets.create({
             ...req.body,
+            coinId: req.body.coinSearch,
             userId: user._id,
             betPostTime: new Date(),
             betResolved: false,
@@ -48,7 +64,7 @@ router.post("/", isUserSignedIn, async function (req, res) {
     }
 });
 
-router.post("/acceptBet/:betId", async function (req, res) {
+router.post("/:userId/acceptBet/:betId", async function (req, res) {
     const userSession = req.session.user;
     const user = await User.findById(userSession._id);
     const betId = req.params.betId;
@@ -93,7 +109,32 @@ router.post("/acceptBet/:betId", async function (req, res) {
         
     }
 });
-router.delete("/:betId", async function(req,res) {
+    router.put("/:userId/:betId", async function (req, res) {
+        try {
+            const bet = await Bets.findById(req.params.betId);
+            if (!bet) {
+                return res.status(404).send("Bet not found");
+            }
+    
+            // Validate or filter req.body before updating
+            bet.set({
+                coinId: req.body.coinSearch,
+                betType: req.body.betType,
+                wager: req.body.wager,
+                betLength: req.body.betLength,
+            });
+    
+            await bet.save();
+    
+            // Get the user ID (assuming bet has a reference to user)
+            res.redirect(`/betBoard/${bet.userId}`); 
+        } catch (error) {
+            console.error(error);
+            res.status(500).send("Internal Server Error");
+        }
+    });
+
+router.delete("/:userId/:betId", async function(req,res) {
     const user = await User.findById(req.session.user._id)
     const bet = await Bets.findById(req.params.betId);
     const wager = bet.wager;
