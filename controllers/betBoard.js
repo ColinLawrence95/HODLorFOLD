@@ -29,7 +29,7 @@ router.get("/acceptBet/:betId", isUserSignedIn, async function (req, res) {
 });
 
 router.post("/", isUserSignedIn, async function (req, res) {
-    const user = req.session.user;
+    const user = await User.findById(req.session.user._id)
     const wager = req.body.wager;
 
     if (user.tokens < wager) {
@@ -40,7 +40,10 @@ router.post("/", isUserSignedIn, async function (req, res) {
             userId: user._id,
             betPostTime: new Date(),
             betResolved: false,
+            
         });
+        user.tokens -= wager;
+        await user.save();
         res.redirect(`/betBoard/${user._id}`);
     }
 });
@@ -69,7 +72,6 @@ router.post("/acceptBet/:betId", async function (req, res) {
         const startPrice = response.data[coinId]?.usd;
 
         user.tokens -= wager;
-        userPosted.tokens -= wager;
         bet.betInProgress = true;
         bet.betAcceptedBy = userSession._id;
         console.log(bet.betAcceptedBy)
@@ -79,7 +81,7 @@ router.post("/acceptBet/:betId", async function (req, res) {
         await userPosted.save();
         await bet.save();
         console.log("Starting bet Timer");
-
+        res.redirect(`/betBoard/${user._id}`);
         setTimeout(async () => {
             try {
                 await betLogic(bet._id, userPosted);
@@ -88,13 +90,17 @@ router.post("/acceptBet/:betId", async function (req, res) {
             }
         }, bet.betLength * 60 * 1000);
 
-        res.redirect(`/betBoard/${user._id}`);
+        
     }
 });
 router.delete("/:betId", async function(req,res) {
-    const user = req.session.user;
+    const user = await User.findById(req.session.user._id)
+    const bet = await Bets.findById(req.params.betId);
+    const wager = bet.wager;
     try{
        await Bets.findByIdAndDelete(req.params.betId);
+       user.tokens += wager;
+       user.save();
     
     } catch (error){
         console.log(error)
@@ -145,7 +151,6 @@ async function betLogic(betId, userPosted) {
     updatedBet.betEndPrice = endPrice;
     updatedBet.betWinner = winner;
     updatedBet.betEndTime = Date.now();
-
     await updatedBet.save();
 
     console.log(

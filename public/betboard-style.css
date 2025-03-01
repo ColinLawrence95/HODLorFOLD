@@ -15,7 +15,6 @@
     min-width: 1280px;
     white-space: nowrap;
 }
-
 .navbar a {
     text-decoration: none;
     color: white;
@@ -27,21 +26,21 @@
     gap: 50px;
     align-items: center;
     width: 100%;
-    
-
 }
-.user-info{
+.user-info p {
     display: flex;
     flex-direction: column;
-    padding: 0 0 0 10px;
     font-weight: bolder;
+    margin: 0;
 }
 .three-column-wrapper{
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
     width: 100%;
-
+    gap: 20px; 
+    padding: 0 50px 0 0;
 }
 .top-row-container{
     width: 100%;
@@ -53,9 +52,8 @@
     flex-direction: column;
     border-radius: 8px;
     width: 240px;
-    
 }
-.test-container{
+.my-bets-container{
     color: #f1f1f1;
     background-color: #1f2333;
     width: 240px;
@@ -67,7 +65,6 @@
     align-items: center;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 1);
     height: 100%;
-
 }
 .posted-bets{
     display: flex;
@@ -77,8 +74,13 @@
     width: 240px;
     color: #f1f1f1;
     font-size: 20px;
-    padding: 10px 0 0 0px;
-    
+    padding: 0px 0 0 0px;
+}
+.mod-buttons{
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    flex-direction: row;
 
 }
 .bet-history-container{
@@ -92,8 +94,6 @@
     align-items: center;
     margin: 10px 0 0 20px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 1);
-
-
 }
 .bet-history{
     display: flex;
@@ -112,13 +112,15 @@
 }
 .open-bets-container{
     display: flex;
-    justify-content: left; 
+    justify-content: center; 
     align-items: center;
     flex-wrap: wrap; 
     gap: 30px; 
-    width: 1200px;
+    width: 70%;
     height: 100%;
-    margin: 5px 0 0 215px;
+    margin: 5px 0px 0 5px;
+    color: #f1f1f1;
+
 }
 .open-bets:hover::after
 {
@@ -133,13 +135,13 @@
     color: #f1f1f1;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    gap: 4px;
     border-radius: 8px;
     position: relative; 
-    margin: 0 0 0 10px;
+    margin: 0 0 0 35px;
     font-size: 20px;
     text-shadow: 0px 10px 20px rgba(0, 0, 0, 1);;
-   
-
+    min-width: 200px;
 }
 .open-bets::after,
 .open-bets::before {
@@ -152,7 +154,7 @@
     left: 50%;
     translate: -50% -50%;
     z-index: -1;
-    padding:4px;
+    padding:5px;
     border-radius: 10px;
     background: conic-gradient(
         from var(--angle) at 50% 50%,
@@ -174,12 +176,27 @@
     filter: blur(1.5rem);
     opacity: 0.5;
 }
+.active-bets-container{
+    color: #f1f1f1;
+    background-color: #1f2333;
+    width: 240px;
+    border: 5px solid #3a6dda;
+    border-radius: 8px;
+    display: flex;
+    justify-content: right;
+    flex-direction: column;
+    align-items: center;
+    margin: 0px 20px 0 0px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 1);
+}
 .active-bets{
     color: #f1f1f1;
-    padding: 0 0 0 100px;
     display: flex;
     flex-direction: column;
-
+    justify-content: center;
+    font-size: 20px;
+   
+   
 
 }
 #title {
@@ -203,7 +220,17 @@
     align-items: top;
     justify-content: center;
     color: #f1f1f1;
-    margin: 20px 110px 0 0;
+    margin: 20px 65px 0 0;
+}
+#username{
+    font-weight: bolder;
+    font-size: 30px;
+    color: #ffb325;
+    animation:3s flash linear infinite;
+    margin: 10px 0 20px 0;
+}
+#bet-against{
+    margin: 20px 0 0 0;
 }
 #bet-history-title{
     color: #f1f1f1;
@@ -214,7 +241,8 @@
 }
 #active-bets-title{
     color: #f1f1f1;
-    padding: 0 30px 0 0;
+    padding: 0 65px 0 0;
+    box-sizing: border-box;
 }
 
 #title:hover{
@@ -227,7 +255,12 @@
     margin: 20px 0 20px 0;
 }
 #delete-button{
-    margin: 20px 0 20px 0;
+    margin: 12px 0 20px 0;
+}
+#edit-button{
+    margin: 12px 0 20px 0;
+    padding: 8px 28.5px 8px 28.5px;
+
 }
 body {
     background-color: #1b213a;
@@ -235,14 +268,18 @@ body {
     display: flex;
     flex-direction: column;
     font-family: "Arsenal SC", system-ui;
-    min-width: 100%;
+    height: 99%;
+    min-height: 100vh;
+    min-width: 1852px;
+    overflow-x: hidden;
+
     
 }
 h1{
     text-shadow: 0px 10px 20px rgba(0, 0, 0, 1);
 }
 p {
-    margin: 0 0 0 0;
+    margin: 5px 0 5px 0;
     
 }
 button{
@@ -268,5 +305,16 @@ button:hover{
     }
     to {
         --angle: 360deg;
+    }
+}
+@keyframes flash {
+    0% {
+        color: rgb(255, 255, 255);
+    }
+    50% {
+        color: #ffb325;
+    }
+    100% {
+        color: rgb(255, 255, 255);
     }
 }

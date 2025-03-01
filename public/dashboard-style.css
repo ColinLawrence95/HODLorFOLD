@@ -30,12 +30,9 @@
     
 
 }
-.user-info{
+.user-info p{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 0 0 0 10px;
     font-weight: bolder;
 }
 .auth-links {

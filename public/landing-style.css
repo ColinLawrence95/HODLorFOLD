@@ -30,12 +30,9 @@
     
 
 }
-.user-info{
+.user-info p{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 0 0 0 0;
     font-weight: bolder;
 }
 .auth-links {
@@ -157,13 +154,21 @@ button.sign-up {
     font-size:50px;
     color: #f1f1f1;
     text-shadow: 0px 10px 20px rgba(0, 0, 0, 1);
+    animation: 10s rotate linear infinite;
     
+}
+#no-bets{
+    color: #f1f1f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation:3s flash linear infinite;
 }
 #username{
     font-weight: bolder;
     font-size: 30px;
     color: #ffb325;
-    animation:3s flashDescTitle linear infinite;
+    animation:3s flash linear infinite;
     margin: 10px 0 20px 0;
 }
 #top-bets-tokens{
@@ -222,7 +227,7 @@ button:hover{
         --angle: 360deg;
     }
 }
-@keyframes flashDescTitle {
+@keyframes flash {
     0% {
         color: rgb(255, 255, 255);
     }
@@ -232,4 +237,22 @@ button:hover{
     100% {
         color: rgb(255, 255, 255);
     }
+}
+@keyframes rotate {
+    0%{
+        transform: rotate(0deg); /* Start at 0 degrees */
+    }
+    25% {
+        transform: rotate(5deg); /* End at 360 degrees */
+    }
+    50%{
+        transform: rotate(0deg); /* End at 360 degrees */
+    }
+    75% {
+        transform: rotate(-5deg); /* End at 360 degrees */
+    }
+    100% {
+        transform: rotate(0deg); /* End at 360 degrees */
+    }
+
 }

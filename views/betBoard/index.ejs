@@ -2,94 +2,101 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<link rel="stylesheet" href="../betboard-style.css" />
-	<title>Bet Board</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../betboard-style.css" />
+    <title>Bet Board</title>
 </head>
 
 <body>
-	<%- include('../partials/_navbar.ejs') %>
-
-	<div class="top-row-container">
-
-		<h1 id="your-bets-title">Your Posted Bets</h1>
-		<h1 id="open-bets-title">Open Bets</h1>
-		<h1 id="active-bets-title">Active Bets</h1>
-
-	</div>
-	<div class="three-column-wrapper">
-		<div class="posted-bets-container">
-			<div class="test-container">
-				<form action="/betBoard/<%= user._id %>/newBet" method="GET" id="new-bet">
-					<button type="submit">New Bet</button>
-				</form>
-				<% bets.forEach(bet => { 
-					if (bet.userId.username === user.username && !bet.betResolved && !bet.betInProgress) { %>
-				<div class="posted-bets">
-					<p id="bet-id"><%= `Bet: ${bet._id}` %></p>
-					<p><%=`${bet.coinId} ${bet.betType} in ${bet.betLength}hr`%></p>
-					<p><%=`🪙 ${bet.wager} `%></p>
-					<form action="/betBoard/<%= user._id %>/<%= bet._id %>?_method=DELETE" method="POST">
-						<button id="delete-button" type="submit">Delete</button>
-					</form>
-				</div>
-				<% } %>
-				<% }) %>
-			</div>
-			<h1 id="bet-history-title">Bet History</h1>
-				<div class="bet-history-container">
-					
-					<% bets.forEach(bet => { 
-    					if (bet.betResolved && (user._id === bet.betWinner || user.username === bet.userId.username || user.username === bet.betAcceptedBy?.username)) { 
-      			 			let status = user._id === bet.betWinner ? "win" : "lose"; %>
-							<div class="bet-history <%= status %>">
-								<p id="bet-id"><%=`Bet: ${bet._id}`%> </p>
-								<p> VS <%= bet.betAcceptedBy?.username ? (bet.betAcceptedBy.username === user.username ? bet.userId.username : bet.betAcceptedBy.username) : "Unknown" %></p>
-								<p><%= status %></p>
-								<p><%=`${status === 'win' ? '+' : '-'}${bet.wager} 🪙`%></p>
-								<p><%=`${bet.coinId} ${bet.betType} in ${bet.betLength}hr`%></p>
-							</div>
-						<% } %>
-					<% }) %>
-				</div>
-		</div>
-		<div class="open-bets-container">
-			<% let availableBets = false; %>
-			<% bets.forEach(bet => { %>
-			<% if (!bet.inProgress && !bet.betResolved && bet.userId.username !== user.username) { %>
-			<% availableBets = true; %>
-			<div class="open-bets">
-				<p><%= bet.userId.username %></p>
-				<p id="bet-id">Bet: <%= bet._id %></p>
-				<p><%= `${bet.coinId} ${bet.betType} in ${bet.betLength}hr` %></p>
-				<p><%= `🪙 ${bet.wager} ` %></p>
-				<form action="/betBoard/<%= user._id %>/acceptBet/<%= bet._id %>" method="POST">
-					<button type="submit">Bet Against</button>
-				</form>
-			</div>
-			<% } %>
-			<% }) %>
-
-			<% if (!availableBets) { %>
-			<p>No Bets Available</p>
-			<% } %>
-		</div>
-
-		<div class="active-bets">
-			<% bets.forEach(bet => { %>
-			<% if (bet.betInProgress && (user.username === bet.userId.username || user.username === bet.betAcceptedBy.username)) {%>
-			<p>VS <%= bet.betAcceptedBy.username === user.username ? bet.userId.username : bet.betAcceptedBy.username %></p>
-			<p id="bet-id"><%= `Bet: ${bet._id}` %></p>
-			<p><%=`${bet.coinId} ${bet.betType} in ${bet.betLength}hr`%></p>
-			<p><%=`🪙 ${bet.wager} `%></p>
-			<% } %>
-			<% }) %>
-		</div>
-	</div>
-
-
-
+    <%- include('../partials/_navbar.ejs') %>
+    <div class="top-row-container">
+        <h1 id="your-bets-title">Your Posted Bets</h1>
+        <h1 id="open-bets-title">Open Bets</h1>
+        <h1 id="active-bets-title">Active Bets</h1>
+    </div>
+    <div class="three-column-wrapper">
+        <div class="posted-bets-container">
+            <div class="my-bets-container">
+                <form action="/betBoard/<%= user._id %>/newBet" method="GET" id="new-bet">
+                    <button type="submit">New Bet</button>
+                </form>
+                <% bets.forEach(bet => { %>
+                   <% if (bet.userId.username === user.username && !bet.betResolved && !bet.betInProgress) { %>
+					<div class="posted-bets">
+						<p id="bet-id"><%= `Bet: ${bet._id}` %></p>
+						<p><%= `${bet.coinId} ${bet.betType} in ${bet.betLength}hr` %></p>
+						<p><%= `🪙 ${bet.wager} ` %></p>
+						<div class="mod-buttons">
+							<form action="/betBoard/<%= user._id %>/<%= bet._id %>?_method=DELETE" method="POST">
+								<button id="delete-button" type="submit">Delete</button>
+							</form>
+							<form action="/betBoard/<%= user._id %>/<%= bet._id %>?_method=PUT" method="POST">
+								<button id="edit-button" type="submit">Edit</button>
+							</form>
+						</div>
+					</div>
+                	<% } %>
+                <% }) %>
+            </div>
+            <h1 id="bet-history-title">Bet History</h1>
+			<% let hasHistory = false; %>
+            <div class="bet-history-container">
+                <% bets.forEach(bet => { %>
+                	<% if (bet.betResolved && (user._id === bet.betWinner || user.username === bet.userId.username || user.username === bet.betAcceptedBy?.username)) { %>
+                    <% let status = user._id === bet.betWinner ? "win" : "lose"; %>
+					<% hasHistory = true; %>
+                <div class="bet-history <%= status %>">
+                    <p id="bet-id"><%= `Bet: ${bet._id}` %></p>
+                    <p><%= status %> vs <%= bet.betAcceptedBy?.username ? (bet.betAcceptedBy.username === user.username ? bet.userId.username : bet.betAcceptedBy.username) : "Unknown" %><%= ` ${status === 'win' ? '+' : '-'}${bet.wager} 🪙` %></p>
+                    <p><%= `${bet.coinId} ${bet.betType} in ${bet.betLength}hr` %></p>
+					<p><%= `Starting Price: $${bet.betStartPrice} ` %></p>
+					<p><%= `Ending Price: $${bet.betEndPrice} ` %></p>
+                </div>
+                <% } %>
+                <% }) %>
+				<% if (!hasHistory) { %>
+            <p>No History Available</p>
+            <% } %>
+            </div>
+        </div>
+        <div class="open-bets-container">
+            <% let availableBets = false; %>
+            <% bets.forEach(bet => { %>
+            <% if ((!bet.inProgress && !bet.betResolved) && (bet.userId.username !== user.username)) { %>
+            <% availableBets = true; %>
+            <div class="open-bets">
+                <p id="username"><%= bet.userId.username %></p>
+                <p><%= `${bet.coinId} ${bet.betType} in ${bet.betLength}hr` %></p>
+                <p><%= `🪙 ${bet.wager} ` %></p>
+                <form action="/betBoard/<%= user._id %>/acceptBet/<%= bet._id %>" method="POST">
+                    <button type="submit" id="bet-against">Bet Against</button>
+                </form>
+            </div>
+            <% } %>
+            <% }) %>
+            <% if (!availableBets) { %>
+            <p>No Bets Available, Check Again Soon!</p>
+            <% } %>
+        </div>
+        <div class="active-bets-container">
+            <% let activeBets = false; %>
+            <% bets.forEach(bet => { %>
+            <% if (bet.betInProgress && (user.username === bet.userId.username || user.username === bet.betAcceptedBy.username)) { %>
+            <% activeBets = true; %>
+            <div class="active-bets">
+                <p>VS <%= bet.betAcceptedBy.username === user.username ? bet.userId.username : bet.betAcceptedBy.username %></p>
+                <p id="bet-id"><%= `Bet: ${bet._id}` %></p>
+                <p><%= `${bet.coinId} ${bet.betType} in ${bet.betLength}hr` %></p>
+                <p>🪙 <%= bet.wager %></p>
+            </div>
+            <% } %>
+            <% }) %>
+            <% if(!activeBets) { %>
+            <p>No Active Bets Available</p>
+            <% } %>
+        </div>
+    </div> 
 </body>
 
 </html>
