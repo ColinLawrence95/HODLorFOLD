@@ -48,15 +48,67 @@
     display: flex;
     justify-content: space-between;
 }
-.your-bets{
+.posted-bets-container{
     display: flex;
     flex-direction: column;
+    border-radius: 8px;
+    width: 240px;
+    
+}
+.test-container{
     color: #f1f1f1;
-    width: 300px;
+    background-color: #1f2333;
+    width: 240px;
+    border: 5px solid #ffb325;
+    border-radius: 8px;
+    margin: 0 0 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 1);
+    height: 100%;
+
+}
+.posted-bets{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 240px;
+    color: #f1f1f1;
+    font-size: 20px;
+    padding: 10px 0 0 0px;
+    
+
+}
+.bet-history-container{
+    color: #f1f1f1;
+    background-color: #1f2333;
+    width: 240px;
+    border: 5px solid #3a6dda;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0 0 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 1);
+
+
 }
 .bet-history{
-    color: #f1f1f1;
-
+    display: flex;
+    flex-direction: column;
+    font-size: 20px
+}
+.win {
+    background-color: rgba(0, 128, 0, 0.103);
+    padding: 10px;
+    border-radius: 8px;
+}
+.lose {
+    background-color: rgba(255, 0, 0, 0.103);
+    padding: 10px;
+    border-radius: 8px;
 }
 .open-bets-container{
     display: flex;
@@ -66,7 +118,7 @@
     gap: 30px; 
     width: 1200px;
     height: 100%;
-    margin: 0 0 0 60px;
+    margin: 5px 0 0 215px;
 }
 .open-bets:hover::after
 {
@@ -83,7 +135,7 @@
     padding: 20px;
     border-radius: 8px;
     position: relative; 
-    margin: 0 0 0 20px;
+    margin: 0 0 0 10px;
     font-size: 20px;
     text-shadow: 0px 10px 20px rgba(0, 0, 0, 1);;
    
@@ -122,6 +174,14 @@
     filter: blur(1.5rem);
     opacity: 0.5;
 }
+.active-bets{
+    color: #f1f1f1;
+    padding: 0 0 0 100px;
+    display: flex;
+    flex-direction: column;
+
+
+}
 #title {
     font-size: 50px;
     margin: 5px;
@@ -136,7 +196,7 @@
     align-items: top;
     justify-content: center;
     color: #f1f1f1;
-    padding: 0 0 0 10px;
+    padding: 0 0 0 20px;
 }
 #open-bets-title{
     display: flex;
@@ -147,24 +207,27 @@
 }
 #bet-history-title{
     color: #f1f1f1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0 0 40px;
 }
 #active-bets-title{
     color: #f1f1f1;
-    padding: 0 10px 0 0;
+    padding: 0 30px 0 0;
 }
 
 #title:hover{
     transform: scale(1.1);
 }
 #bet-id{
-    font-size: 14px ;
+    font-size: 16px ;
 }
 #new-bet{
-    display: flex;
-    align-items: left;
-    justify-content: left;
-    margin: 20px 0 0 0;
-
+    margin: 20px 0 20px 0;
+}
+#delete-button{
+    margin: 20px 0 20px 0;
 }
 body {
     background-color: #1b213a;
@@ -172,11 +235,15 @@ body {
     display: flex;
     flex-direction: column;
     font-family: "Arsenal SC", system-ui;
-    min-width: 1280px;
+    min-width: 100%;
     
+}
+h1{
+    text-shadow: 0px 10px 20px rgba(0, 0, 0, 1);
 }
 p {
     margin: 0 0 0 0;
+    
 }
 button{
     color: #f1f1f1;
