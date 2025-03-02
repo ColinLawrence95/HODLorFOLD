@@ -32,7 +32,15 @@ app.use(
     })
 );
 app.get("/", async function (req, res) {
-    const topBets = await Bets.find({ betPostTime: { $exists: true }, betInProgress: false, betResolved: false }).populate("userId", "username");
+    const topBets = await Bets.find({
+        betPostTime: { $exists: true },
+        betInProgress: false,
+        betResolved: false
+    })
+        .sort({ wager: -1 })  
+        .limit(6)             
+        .populate("userId", "username");  
+        
     res.render("index.ejs", {
         user: req.session.user,
         topBets: topBets,
