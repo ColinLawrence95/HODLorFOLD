@@ -40,24 +40,32 @@
                 <% }) %>
             </div>
             <h1 id="bet-history-title">Bet History</h1>
-			<% let hasHistory = false; %>
+
+            <% let resolvedBets = bets.filter(bet => bet.betResolved && (user._id === String(bet.betWinner) || user.username === bet.userId?.username || user.username === bet.betAcceptedBy?.username)).sort((a, b) => new Date(b.betEndTime) - new Date(a.betEndTime)).slice(0, 5); %>
             <div class="bet-history-container">
-                <% bets.forEach(bet => { %>
-                	<% if (bet.betResolved && (user._id === bet.betWinner || user.username === bet.userId.username || user.username === bet.betAcceptedBy?.username)) { %>
-                    <% let status = user._id === bet.betWinner ? "win" : "lose"; %>
-					<% hasHistory = true; %>
-                <div class="bet-history <%= status %>">
-                    <p id="bet-id"><%= `Bet: ${bet._id}` %></p>
-                    <p><%= status %> vs <%= bet.betAcceptedBy?.username ? (bet.betAcceptedBy.username === user.username ? bet.userId.username : bet.betAcceptedBy.username) : "Unknown" %><%= ` ${status === 'win' ? '+' : '-'}${bet.wager} 🪙` %></p>
-                    <p><%= `${bet.coinId} ${bet.betType} in ${bet.betLength}hr` %></p>
-					<p><%= `Starting Price: $${bet.betStartPrice} ` %></p>
-					<p><%= `Ending Price: $${bet.betEndPrice} ` %></p>
-                </div>
+                <% if (resolvedBets.length > 0) { %>
+                    <% resolvedBets.forEach(bet => { %>
+                        <% let status = String(user._id) === String(bet.betWinner) ? "win" : "lose"; %>
+                        <div class="bet-history <%= status %>">
+                            <p id="bet-id"><%= `Bet: ${bet._id}` %></p>
+                            <p>
+                                <%= status %> vs 
+                                <%= bet.betAcceptedBy?.username 
+                                    ? (bet.betAcceptedBy.username === user.username ? bet.userId?.username : bet.betAcceptedBy.username) 
+                                    : "Unknown" %>
+                                <%= ` ${status === 'win' ? '+' : '-'}${bet.wager} 🪙` %>
+                            </p>
+                            <p><%= `${bet.coinId} ${bet.betType} in ${bet.betLength}hr` %></p>
+                            <p id="bet-history-time"><%= `Start Time: ${new Date(bet.betStartTime).toLocaleString()}` %></p>
+                            <p><%= `Starting Price: $${bet.betStartPrice?.toFixed(2)}` %></p>
+                            <p id="bet-history-time"><%= `End Time: ${new Date(bet.betEndTime).toLocaleString()}` %></p>
+                            <p><%= `Ending Price: $${bet.betEndPrice?.toFixed(2)}` %></p>
+                            
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p>No History Available</p>
                 <% } %>
-                <% }) %>
-				<% if (!hasHistory) { %>
-            <p>No History Available</p>
-            <% } %>
             </div>
         </div>
         <div class="open-bets-container">

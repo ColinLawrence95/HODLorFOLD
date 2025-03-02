@@ -25,7 +25,9 @@ router.get("/:userId/newBet", isUserSignedIn, async function (req, res) {
 });
 
 router.get(
-    "/:userId/acceptBet/:betId", isUserSignedIn,async function (req, res) {
+    "/:userId/acceptBet/:betId",
+    isUserSignedIn,
+    async function (req, res) {
         const user = req.session.user;
         let betId = req.params.betId;
         let bet = await Bets.findById(betId).populate("userId", "username");
@@ -83,7 +85,6 @@ router.post(
         const bet = await Bets.findById(betId).populate("userId");
         const wager = bet.wager;
         const userPosted = await User.findById(bet.userId._id);
-        const coinId = bet.coinId;
 
         if (user.tokens < wager) {
             return res.send("Not Enough Tokens!");
@@ -99,7 +100,7 @@ router.post(
                 await user.save();
                 await userPosted.save();
                 await bet.save();
-                console.log("Starting bet Timer");
+                console.log(`Starting bet Timer for ${betId}`);
                 res.redirect(`/betBoard/${user._id}`);
                 setTimeout(async () => {
                     try {
@@ -121,7 +122,7 @@ router.put("/:userId/:betId", isUserSignedIn, async function (req, res) {
         }
         user.tokens += bet.wager;
         await user.save();
-    
+
         bet.set({
             coinId: req.body.coinSearch,
             betType: req.body.betType,
@@ -133,7 +134,6 @@ router.put("/:userId/:betId", isUserSignedIn, async function (req, res) {
         user.tokens -= bet.wager;
         await user.save();
 
-        
         res.redirect(`/betBoard/${bet.userId}`);
     } catch (error) {
         console.error(error);
@@ -150,7 +150,7 @@ router.delete("/:userId/:betId", isUserSignedIn, async function (req, res) {
         user.tokens += wager;
         user.save();
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.redirect(`/betBoard/${user._id}`);
     }
     res.redirect(`/betBoard/${user._id}`);
@@ -161,39 +161,42 @@ async function betLogic(betId, userPosted) {
     const updatedBet = await Bets.findById(betId);
     if (!updatedBet || updatedBet.betResolved) return;
 
-
     let endPrice = await fetchCoinPrice(updatedBet);
+    let winnerId;
 
-        let winner;
-      
-        if (
-            updatedBet.betType === "up" &&
-            endPrice > updatedBet.betStartPrice
-        ) {
-            winner = userPosted;
-        } else if (
-            updatedBet.betType === "down" &&
-            endPrice < updatedBet.betStartPrice
-        ) {
-            winner = userPosted;
-        } else {
-            winner = updatedBet.betAcceptedBy;
-        }
-            
-            const winningUser = await User.findById(winner);
-            winningUser.tokens += updatedBet.wager * 2; 
-            await winningUser.save();
-            updatedBet.betResolved = true;
-            updatedBet.betInProgress = false;
-            updatedBet.betEndPrice = endPrice;
-            updatedBet.betWinner = winner;
-            updatedBet.betEndTime = Date.now();
-            await updatedBet.save();
+    if (
+        (updatedBet.betType === "up" && endPrice > updatedBet.betStartPrice) ||
+        (updatedBet.betType === "down" && endPrice < updatedBet.betStartPrice)
+    ) {
+        winnerId = userPosted._id.toString(); // Ensure we store the ID, not the object
+    } else if (updatedBet.betAcceptedBy) {
+        winnerId = updatedBet.betAcceptedBy._id
+            ? updatedBet.betAcceptedBy._id.toString()
+            : updatedBet.betAcceptedBy.toString();
+    }
 
-            console.log(
-                `Bet ${updatedBet._id} resolved. Winner: ${winner || "No one"}`
-            );
-   
+    if (!winnerId) {
+        console.error("Winner ID is undefined!");
+        return;
+    }
+
+    const winningUser = await User.findById(winnerId);
+    if (!winningUser) {
+        console.error(`User with ID ${winnerId} not found`);
+        return;
+    }
+
+    winningUser.tokens += updatedBet.wager * 2;
+    await winningUser.save();
+
+    updatedBet.betResolved = true;
+    updatedBet.betInProgress = false;
+    updatedBet.betEndPrice = endPrice;
+    updatedBet.betWinner = winnerId; // Store the ID as a string
+    updatedBet.betEndTime = Date.now();
+    await updatedBet.save();
+
+    console.log(`Bet ${updatedBet._id} resolved. Winner: ${winnerId}`);
 }
 
 async function fetchCoinPrice(updatedBet) {

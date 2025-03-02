@@ -4,14 +4,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/newBet-style.css" />
-  <title>Sign In</title>
+  <link rel="stylesheet" href="/editBet-style.css" />
+  <title>Edit Bet</title>
 </head>
 
 <body>
   <%- include('../partials/_navbar.ejs') %>
-  <h1 class="new-bet-title">Edit bet</h1>
-  <p class="new-net-title"><%= bet._id %></p>
+  <h1 class="edit-bet-title">Edit bet</h1>
+  <p class="edit-bet-title"><%= bet._id %></p>
   
   <form action="/betBoard/<%= user._id %>/<%= bet._id %>?_method=PUT" method="POST">
       <div class="user-input">
@@ -33,7 +33,7 @@
         <option value="8">8 Hour</option>
       </select>
       <label for="wager">Wager 🪙</label>
-      <input type="text" name="wager" id="wager" required />
+      <input type="number" name="wager" id="wager" required />
       <button type="submit">Post Bet</button>
   </div>
   </form>
